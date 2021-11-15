@@ -107,15 +107,15 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
             query.setString(2, contrasenha);
             resultado = query.executeQuery();
             if (resultado.next()){
-                query = conexion.prepareStatement("select * "
-                    + "from amigo "
-                    + "where usuario1=?");
-                query.setString(1, nombre);
-                resultado = query.executeQuery();
-                while (resultado.next()){
-                    amigo = resultado.getString("usuario2");
-                    if(clientesOnline.containsKey(amigo)) amigos.put(amigo, clientesOnline.get(amigo));
-                }
+//                query = conexion.prepareStatement("select * "
+//                    + "from amigo "
+//                    + "where usuario1=?");
+//                query.setString(1, nombre);
+//                resultado = query.executeQuery();
+//                while (resultado.next()){
+//                    amigo = resultado.getString("usuario2");
+//                    if(clientesOnline.containsKey(amigo)) amigos.put(amigo, clientesOnline.get(amigo));
+//                }
             }
             else amigos = null;
         } catch (SQLException e) {
