@@ -64,7 +64,7 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
         ResultSet resultado;
         Boolean estado;
         try {
-            query = conexion.prepareStatement("select * "
+            query = conexion.prepareStatement("select nombre "
                     + "from usuario "
                     + "where nombre=?");
             query.setString(1, nombre);
