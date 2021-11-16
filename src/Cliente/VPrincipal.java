@@ -1,10 +1,7 @@
 package Cliente;
 
 import common.Cliente;
-import java.rmi.RemoteException;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;

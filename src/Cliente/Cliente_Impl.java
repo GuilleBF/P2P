@@ -8,8 +8,6 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
