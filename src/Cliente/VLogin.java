@@ -29,6 +29,7 @@ public class VLogin extends javax.swing.JFrame {
         campoContrasenhaRegistro = new javax.swing.JTextField();
         botonRegistro = new javax.swing.JButton();
 
+        setTitle("Chat GBF-MCD");
         setMinimumSize(new java.awt.Dimension(450, 270));
 
         jTabbedPane1.setMaximumSize(new java.awt.Dimension(426, 246));
@@ -83,7 +84,6 @@ public class VLogin extends javax.swing.JFrame {
         jTabbedPane1.addTab("Login", panelLogin);
 
         panelRegistro.setMaximumSize(null);
-        panelRegistro.setMinimumSize(null);
 
         jLabel3.setText("Usuario");
 

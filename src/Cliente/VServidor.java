@@ -20,6 +20,7 @@ public class VServidor extends javax.swing.JFrame {
         boton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Chat GBF-MCD");
 
         jLabel1.setText("Nombre/IP servidor");
 

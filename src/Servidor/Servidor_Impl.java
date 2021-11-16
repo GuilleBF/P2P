@@ -12,6 +12,8 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
@@ -85,7 +87,11 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
         Cliente cliente_solicitante = usuariosOnline.get(solicitante);
         
         // Si el solicitante está online, le informamos de la respuesta
-        if(cliente_solicitante != null) cliente_solicitante.informarSolicitud(solicitado, respuesta);
+        if(cliente_solicitante != null) try {
+            cliente_solicitante.informarSolicitud(solicitado, respuesta);
+        } catch (RemoteException e) {
+            System.out.println(e.getMessage());
+        }
         
         // Registramos la nueva amistad
         if(respuesta) bbdd.registrarAmistad(solicitante, solicitado);

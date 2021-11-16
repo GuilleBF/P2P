@@ -8,6 +8,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
@@ -83,7 +85,11 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     }
 
     public void responderSolicitud(String solicitante, String solicitado, boolean respuesta) {
-        servidor.responderSolicitud(solicitante, solicitado, respuesta);
+        try {
+            servidor.responderSolicitud(solicitante, solicitado, respuesta);
+        } catch (RemoteException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override

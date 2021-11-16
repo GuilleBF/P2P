@@ -9,5 +9,5 @@ public interface Cliente extends Remote {
     
     public void popUpSolicitud(String solicitante, String solicitado) throws RemoteException;
 
-    public void informarSolicitud(String solicitado, boolean respuesta);
+    public void informarSolicitud(String solicitado, boolean respuesta) throws RemoteException;
 }
