@@ -14,4 +14,6 @@ public interface Servidor extends Remote {
 
     public void responderSolicitud(String solicitante, String solicitado, boolean respuesta) throws RemoteException;
 
+    public void unlogin(String usuario) throws RemoteException;
+
 }

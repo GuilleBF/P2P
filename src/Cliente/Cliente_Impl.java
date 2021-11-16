@@ -8,12 +8,15 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
     private final VServidor ventanaServidor;
     private final VLogin ventanaLogin;
     private final VPrincipal ventanaPrincipal;
+    private String nombreUsuario;
     private Servidor servidor;
     private HashMap<String, Cliente> amigosOnline;
     
@@ -71,6 +74,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
             System.out.println(e.getMessage());
         }
         ventanaPrincipal.actualizarAmigos(amigosOnline);
+        this.nombreUsuario = usuario;
     }
 
     @Override
@@ -103,9 +107,19 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     }
 
     @Override
-    public synchronized void eliminarAmigoOnline(Cliente amigo, String nombre) throws RemoteException {
+    public synchronized void eliminarAmigoOnline(String nombre) throws RemoteException {
         amigosOnline.remove(nombre);
         ventanaPrincipal.actualizarAmigos(amigosOnline);
+    }
+
+    public synchronized void shutdown() {
+        try {
+            for(Cliente amigo:amigosOnline.values()) amigo.eliminarAmigoOnline(nombreUsuario);
+            servidor.unlogin(nombreUsuario);
+        } catch (RemoteException e) {
+            System.out.println(e.getMessage());
+        }
+        System.exit(0);
     }
     
 }

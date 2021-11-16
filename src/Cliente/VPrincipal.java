@@ -18,6 +18,13 @@ public class VPrincipal extends javax.swing.JFrame {
         this.listaAmigos.addListSelectionListener((ListSelectionEvent listSelectionEvent) -> {
             this.panelMensajes.setText(mensajes.get(this.listaAmigos.getSelectedValue()));
         });
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                cliente.shutdown();
+            }   
+        });
     }
 
     @SuppressWarnings("unchecked")

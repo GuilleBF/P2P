@@ -13,5 +13,5 @@ public interface Cliente extends Remote {
     
     public void anadirAmigoOnline(Cliente amigo, String nombre) throws RemoteException;
     
-    public void eliminarAmigoOnline(Cliente amigo, String nombre) throws RemoteException;
+    public void eliminarAmigoOnline(String nombre) throws RemoteException;
 }

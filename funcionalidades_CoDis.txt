@@ -16,4 +16,6 @@ En funcionamiento:
 		✓ Si se reciben, se añaden a la lista de paneles.
 	
 	Desconexion:
-		Se informa a los amigos y al servidor de la desconexión
+		✓ Se informa a los amigos y al servidor de la desconexión
+		
+POR HACER: funcionalidad en la GUI para enviar mensajes y peticiones
