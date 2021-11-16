@@ -121,5 +121,22 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         }
         System.exit(0);
     }
+
+    public boolean enviarSolicitud(String solicitado) {
+        try {
+            return servidor.enviarSolicitud(this.nombreUsuario, solicitado);
+        } catch (RemoteException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    void send(String amigo, String mensaje) {
+        try {
+            amigosOnline.get(amigo).enviarMensaje(nombreUsuario, mensaje);
+        } catch (RemoteException e) {
+            System.out.println(e.getMessage());
+        }
+    }
     
 }

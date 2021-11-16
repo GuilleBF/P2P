@@ -1,7 +1,10 @@
 package Cliente;
 
 import common.Cliente;
+import java.rmi.RemoteException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -55,8 +58,18 @@ public class VPrincipal extends javax.swing.JFrame {
         jScrollPane2.setViewportView(panelMensajes);
 
         botonAmistad.setText("Enviar solicitud");
+        botonAmistad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAmistadActionPerformed(evt);
+            }
+        });
 
         botonMensaje.setText("Enviar");
+        botonMensaje.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonMensajeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -102,6 +115,20 @@ public class VPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void botonAmistadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAmistadActionPerformed
+        if(!campoAmistad.getText().isEmpty()){
+            if(cliente.enviarSolicitud(campoAmistad.getText())) JOptionPane.showMessageDialog(this, "Solicitud enviada");
+            else JOptionPane.showMessageDialog(this, "Error en el envío de la petición", "Error envío", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_botonAmistadActionPerformed
+
+    private void botonMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMensajeActionPerformed
+        if(!campoMensaje.getText().isEmpty()){
+            cliente.send(listaAmigos.getSelectedValue(), campoMensaje.getText());
+            campoMensaje.setText("");
+        }
+    }//GEN-LAST:event_botonMensajeActionPerformed
 
     public void popUpSolicitud(String solicitante, String solicitado){
         Object[] opciones = { "Aceptar", "Rechazar"};

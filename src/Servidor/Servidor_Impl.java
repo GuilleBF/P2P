@@ -12,8 +12,6 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
@@ -87,7 +85,12 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
     }
     
     @Override
-    public void responderSolicitud(String solicitante, String solicitado, boolean respuesta) {
+    public synchronized void unlogin(String usuario) throws RemoteException {
+        usuariosOnline.remove(usuario);
+    }
+    
+    @Override
+    public synchronized void responderSolicitud(String solicitante, String solicitado, boolean respuesta) {
         Cliente cliente_solicitante = usuariosOnline.get(solicitante);
         Cliente cliente_solicitado = usuariosOnline.get(solicitado);
         
@@ -135,4 +138,5 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
             System.out.println(e.getMessage());
         }
     }
+
 }
