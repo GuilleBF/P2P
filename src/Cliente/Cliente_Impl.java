@@ -22,7 +22,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         ventanaServidor.setLocationRelativeTo(null);
         ventanaLogin = new VLogin(this);
         ventanaLogin.setLocationRelativeTo(null);
-        ventanaPrincipal = new VPrincipal();
+        ventanaPrincipal = new VPrincipal(this);
         ventanaPrincipal.setLocationRelativeTo(null);
     }
 
@@ -49,18 +49,21 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
             System.out.println(e.getMessage());
         }
     }
-
-
-    @Override
-    public void enviarMensaje(String emisor, String mensaje) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    void registrar(String usuario, String contrasenha) {
+        try {
+            ventanaLogin.estadoRegistro(servidor.registrar(usuario, contrasenha));
+        } catch (RemoteException e) {
+            System.out.println(e.getMessage());
+        }
     }
-
+    
     void login(String usuario, String contrasenha) {
         try {
             amigosOnline = servidor.login(this, usuario, contrasenha);
             if(amigosOnline == null) ventanaLogin.loginErroneo();
             else{
+                // Activamos la ventana principal
                 ventanaLogin.setVisible(false);
                 ventanaPrincipal.setVisible(true);
             }
@@ -69,12 +72,23 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         }
     }
 
-    void registrar(String usuario, String contrasenha) {
-        try {
-            ventanaLogin.estadoRegistro(servidor.registrar(usuario, contrasenha));
-        } catch (RemoteException e) {
-            System.out.println(e.getMessage());
-        }
+    @Override
+    public void enviarMensaje(String emisor, String mensaje) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public void popUpSolicitud(String solicitante, String solicitado) {
+        ventanaPrincipal.popUpSolicitud(solicitante, solicitado);
+    }
+
+    public void responderSolicitud(String solicitante, String solicitado, boolean respuesta) {
+        servidor.responderSolicitud(solicitante, solicitado, respuesta);
+    }
+
+    @Override
+    public void informarSolicitud(String solicitado, boolean respuesta) {
+        ventanaPrincipal.informarSolicitud(solicitado, respuesta);
+    }
+    
 }

@@ -3,7 +3,6 @@ package Servidor;
 import common.Cliente;
 import common.Servidor;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.rmi.Naming;
@@ -11,123 +10,88 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Properties;
 
 
 public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
     
-    private java.sql.Connection conexion = null;
-    private final HashMap<String, Cliente> clientesOnline;
+    private final HashMap<String, Cliente> usuariosOnline;
+    private final BaseDatosHandler bbdd;
     
-    
-    public Servidor_Impl() throws RemoteException{
-        establecerConexion();
-        if (conexion == null){
-            System.out.println("No se pudo establecer la conexión con las base de datos. Revise baseDatos.properties");
-        }
-        clientesOnline = new HashMap<>();
-    }
-    
-    private void establecerConexion(){
-        Properties configuracion = new Properties();
-        Properties usuario = new Properties();
-        
-        try {
-            
-            try (FileInputStream archivoConfiguracion = new FileInputStream("baseDatos.properties")) {
-                configuracion.load(archivoConfiguracion);
-            }
-            
-            usuario.setProperty("user", configuracion.getProperty("usuario"));
-            usuario.setProperty("password", configuracion.getProperty("clave"));
-            
-            conexion = java.sql.DriverManager.getConnection("jdbc:" 
-                    + configuracion.getProperty("gestor") + "://"
-                    + configuracion.getProperty("servidor") + ":"
-                    + configuracion.getProperty("puerto") + "/"
-                    + configuracion.getProperty("baseDatos"),
-                    usuario);
-            
-        } catch (SQLException | IOException e) {
-            System.out.println(e.getMessage());
-        }
+    public Servidor_Impl() throws RemoteException {
+        usuariosOnline = new HashMap<>();
+        bbdd = new BaseDatosHandler();
     }
 
     @Override
-    public Boolean registrar(String nombre, String contrasenha) throws RemoteException {
-        PreparedStatement query = null;
-        PreparedStatement insercion = null;
-        ResultSet resultado;
-        Boolean estado;
-        try {
-            query = conexion.prepareStatement("select nombre "
-                    + "from usuario "
-                    + "where nombre=?");
-            query.setString(1, nombre);
-            resultado = query.executeQuery();
-            if (resultado.next()) estado = false;
-            else{
-                insercion = conexion.prepareStatement("INSERT INTO usuario "
-                    + "VALUES (?, ?) ");
-                insercion.setString(1, nombre);
-                insercion.setString(2, contrasenha);
-                insercion.executeUpdate();
-                estado = true;
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            estado = false;
-        } finally {
-            try {
-                if(query!=null) query.close();
-                if(insercion!=null) insercion.close();
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
+    public int registrar(String nombre, String contrasenha) throws RemoteException {
+        if(!bbdd.usuarioExiste(nombre)){
+            if(bbdd.registrarUsuario(nombre, contrasenha)) return 0; // Usuario registrado
+            return 2; // Error: error indeterminado
         }
-        return estado;
+        return 1; // Error: Usuario ya existe
     }
 
     @Override
     public synchronized HashMap<String, Cliente> login(Cliente cliente, String nombre, String contrasenha) throws RemoteException {
-        PreparedStatement query = null;
-        ResultSet resultado;
-        HashMap<String, Cliente> amigos = new HashMap<>();
-        String amigo;
-        
-        try {
-            query = conexion.prepareStatement("select * "
-                    + "from usuario "
-                    + "where nombre=? and contrasenha=?");
-            query.setString(1, nombre);
-            query.setString(2, contrasenha);
-            resultado = query.executeQuery();
-            if (resultado.next()){
-//                query = conexion.prepareStatement("select * "
-//                    + "from amigo "
-//                    + "where usuario1=?");
-//                query.setString(1, nombre);
-//                resultado = query.executeQuery();
-//                while (resultado.next()){
-//                    amigo = resultado.getString("usuario2");
-//                    if(clientesOnline.containsKey(amigo)) amigos.put(amigo, clientesOnline.get(amigo));
-//                }
+        if(bbdd.checkUsuario(nombre, contrasenha)){
+            
+            // Ponemos al cliente como online
+            usuariosOnline.put(nombre, cliente);
+            
+            // Procesamos sus solicitudes de amistad guardadas
+            for(String solicitante : bbdd.obtenerSolicitudes(nombre)){
+                enviarSolicitud(solicitante, nombre);
             }
-            else amigos = null;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } finally {
+            
+            // Le obtenemos su lista de amigos
+            ArrayList<String> amigos = bbdd.obtenerAmigos(nombre);
+            if (amigos == null) return null; // Si hubo un problema obteniendo la lista de amigos
+            
+            // Le devolvemos sus amigos online
+            HashMap<String, Cliente> amigosOnline = new HashMap<>();
+            for(String amigo : amigos){
+                if(usuariosOnline.containsKey(amigo)) amigosOnline.put(amigo, usuariosOnline.get(amigo));
+            }
+            return amigosOnline;
+        }
+        return null; // Si no existe un usuario con esas credenciales
+    }
+    
+    @Override
+    public synchronized boolean enviarSolicitud(String solicitante, String solicitado){
+        // La flag bd indica si la solicitud se ha lanzado desde la base de datos
+        
+        Cliente cliente_solicitado = usuariosOnline.get(solicitado);
+        
+        if(solicitado!=null){  // Si está online, se le manda el popup
             try {
-                if(query!=null) query.close();
-            } catch (SQLException e) {
+                cliente_solicitado.popUpSolicitud(solicitante, solicitado);
+                return true;
+            } catch (RemoteException e) {
                 System.out.println(e.getMessage());
+                return false;
             }
         }
-        return amigos;
+        
+        // Sino, queda registrada
+        return bbdd.registrarSolicitud(solicitante, solicitado);
+
+    }
+    
+    @Override
+    public void responderSolicitud(String solicitante, String solicitado, boolean respuesta) {
+        Cliente cliente_solicitante = usuariosOnline.get(solicitante);
+        
+        // Si el solicitante está online, le informamos de la respuesta
+        if(cliente_solicitante != null) cliente_solicitante.informarSolicitud(solicitado, respuesta);
+        
+        // Registramos la nueva amistad
+        if(respuesta) bbdd.registrarAmistad(solicitante, solicitado);
+        
+        // Eliminamos la solicitud si estaba en la BBDD
+        bbdd.eliminarSolicitud(solicitante, solicitado);
     }
 
     public static void main(String args[]) {

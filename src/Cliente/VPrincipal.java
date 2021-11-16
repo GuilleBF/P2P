@@ -1,9 +1,14 @@
 package Cliente;
 
-public class VPrincipal extends javax.swing.JFrame {
+import javax.swing.JOptionPane;
 
-    public VPrincipal() {
+public class VPrincipal extends javax.swing.JFrame {
+    
+    Cliente_Impl cliente;
+
+    public VPrincipal(Cliente_Impl cliente) {
         initComponents();
+        this.cliente = cliente;
     }
 
     @SuppressWarnings("unchecked")
@@ -52,11 +57,27 @@ public class VPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
+    public void popUpSolicitud(String solicitante, String solicitado){
+        Object[] opciones = { "Aceptar", "Rechazar"};
+        cliente.responderSolicitud(solicitante, solicitado, (JOptionPane.showOptionDialog(null,
+             "El usuario "+solicitante+" quiere ser su amigo. Acepta?",
+             "Solicitud de amistad",
+             JOptionPane.YES_NO_OPTION,
+             JOptionPane.PLAIN_MESSAGE,
+             null,
+             opciones,
+             null) == JOptionPane.YES_OPTION)==true);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
+
+    void informarSolicitud(String solicitado, boolean respuesta) {
+        if(respuesta) JOptionPane.showMessageDialog(this, "El usuario "+solicitado+" es ahora su amigo");
+        else JOptionPane.showMessageDialog(this, "El usuario "+solicitado+"ha rechazado su solicitud de amistad", "Solicitud rechazada", JOptionPane.ERROR_MESSAGE);
+    }
 }

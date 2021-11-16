@@ -8,3 +8,8 @@ nbproject/private/private.properties
 baseDatos.properties
 
 *.class
+/dist/
+
+build/*
+
+nbproject/private/private.xml

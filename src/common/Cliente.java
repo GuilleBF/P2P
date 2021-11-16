@@ -7,4 +7,7 @@ public interface Cliente extends Remote {
 
     public void enviarMensaje(String emisor, String mensaje) throws RemoteException;
     
+    public void popUpSolicitud(String solicitante, String solicitado) throws RemoteException;
+
+    public void informarSolicitud(String solicitado, boolean respuesta);
 }

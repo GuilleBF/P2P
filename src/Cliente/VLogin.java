@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 
 public class VLogin extends javax.swing.JFrame {
 
-    Cliente_Impl cliente;
+    private final Cliente_Impl cliente;
     
     public VLogin(Cliente_Impl cliente) {
         initComponents();
@@ -179,13 +179,20 @@ public class VLogin extends javax.swing.JFrame {
     private javax.swing.JPanel panelRegistro;
     // End of variables declaration//GEN-END:variables
 
-    void estadoRegistro(Boolean registrado) {
-        if(registrado) JOptionPane.showMessageDialog(this, "Registrado correctamente!");
-        else JOptionPane.showMessageDialog(this, "Error en el registro!", "Error", JOptionPane.ERROR_MESSAGE);
-            
+    void estadoRegistro(int codigo) {
+        switch(codigo){
+            case 0:
+                JOptionPane.showMessageDialog(this, "Registrado correctamente");
+                break;
+            case 1:
+                JOptionPane.showMessageDialog(this, "El usuario ya existe", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
+            case 2:
+                JOptionPane.showMessageDialog(this, "Error de conexión, vuelva a intentarlo", "Error", JOptionPane.ERROR_MESSAGE);
+        }  
     }
 
     void loginErroneo() {
-        JOptionPane.showMessageDialog(this, "Error en el login!", "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Error en el login", "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
