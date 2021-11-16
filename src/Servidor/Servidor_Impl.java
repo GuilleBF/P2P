@@ -56,6 +56,10 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
             for(String amigo : amigos){
                 if(usuariosOnline.containsKey(amigo)) amigosOnline.put(amigo, usuariosOnline.get(amigo));
             }
+            
+            // Le añadimos a las listas de sus amigos
+            for(Cliente amigo:amigosOnline.values()) amigo.anadirAmigoOnline(cliente, nombre);
+            
             return amigosOnline;
         }
         return null; // Si no existe un usuario con esas credenciales
@@ -85,10 +89,13 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
     @Override
     public void responderSolicitud(String solicitante, String solicitado, boolean respuesta) {
         Cliente cliente_solicitante = usuariosOnline.get(solicitante);
+        Cliente cliente_solicitado = usuariosOnline.get(solicitado);
         
-        // Si el solicitante está online, le informamos de la respuesta
+        // Si el solicitante está online, le informamos de la respuesta y añadimos el uno a la lista del otro
         if(cliente_solicitante != null) try {
             cliente_solicitante.informarSolicitud(solicitado, respuesta);
+            cliente_solicitante.anadirAmigoOnline(cliente_solicitado, solicitado);
+            cliente_solicitado.anadirAmigoOnline(cliente_solicitante, solicitante);
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
         }

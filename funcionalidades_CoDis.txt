@@ -1,19 +1,19 @@
 Registro:
-	Si el usuario ya existe, error
+	✓ Si el usuario ya existe, error
 	
 Login:
-	Si existe una tupla con el mismo nombre y contraseña, entramos
-	Mostramos solicitudes de amistad pendientes, aceptar/rechazar
-	Mostramos como online, cada amigo recibe la referencia
-	Le pasamos su lista de amigos online
+	✓ Si existe una tupla con el mismo nombre y contraseña, entramos
+	✓ Mostramos solicitudes de amistad pendientes, aceptar/rechazar
+	✓ Mostramos como online, cada amigo recibe la referencia
+	✓ Le pasamos su lista de amigos online
 	
 En funcionamiento:
-	Solicitud de amistad:
-		Si está online, mandamos popup al detinatario. Sólo si pulsa aceptar se añade
-		Si no, se registra en la base de datos
+	✓ Solicitud de amistad:
+		✓ Si está online, mandamos popup al detinatario. Hay que aceptar/rechazar
+		✓ Si no, se registra en la base de datos
 		
 	Mensajes:
-		Si se reciben, se añaden a la lista de paneles.
+		✓ Si se reciben, se añaden a la lista de paneles.
 	
 	Desconexion:
 		Se informa a los amigos y al servidor de la desconexión

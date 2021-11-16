@@ -8,8 +8,6 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
@@ -60,7 +58,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         }
     }
     
-    void login(String usuario, String contrasenha) {
+    public synchronized void login(String usuario, String contrasenha) {
         try {
             amigosOnline = servidor.login(this, usuario, contrasenha);
             if(amigosOnline == null) ventanaLogin.loginErroneo();
@@ -72,11 +70,12 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
         }
+        ventanaPrincipal.actualizarAmigos(amigosOnline);
     }
 
     @Override
     public void enviarMensaje(String emisor, String mensaje) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ventanaPrincipal.registrarMensaje(emisor, mensaje);
     }
 
     @Override
@@ -95,6 +94,18 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     @Override
     public void informarSolicitud(String solicitado, boolean respuesta) {
         ventanaPrincipal.informarSolicitud(solicitado, respuesta);
+    }
+
+    @Override
+    public synchronized void anadirAmigoOnline(Cliente amigo, String nombre) throws RemoteException {
+        amigosOnline.put(nombre, amigo);
+        ventanaPrincipal.actualizarAmigos(amigosOnline);
+    }
+
+    @Override
+    public synchronized void eliminarAmigoOnline(Cliente amigo, String nombre) throws RemoteException {
+        amigosOnline.remove(nombre);
+        ventanaPrincipal.actualizarAmigos(amigosOnline);
     }
     
 }

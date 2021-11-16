@@ -1,14 +1,23 @@
 package Cliente;
 
+import common.Cliente;
+import java.util.HashMap;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
 
 public class VPrincipal extends javax.swing.JFrame {
     
-    Cliente_Impl cliente;
+    private final Cliente_Impl cliente;
+    private final HashMap<String,String> mensajes;
 
     public VPrincipal(Cliente_Impl cliente) {
         initComponents();
         this.cliente = cliente;
+        this.mensajes = new HashMap<>();
+        this.listaAmigos.addListSelectionListener((ListSelectionEvent listSelectionEvent) -> {
+            this.panelMensajes.setText(mensajes.get(this.listaAmigos.getSelectedValue()));
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -16,9 +25,9 @@ public class VPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        listaAmigos = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        panelMensajes = new javax.swing.JTextArea();
         campoAmistad = new javax.swing.JTextField();
         botonAmistad = new javax.swing.JButton();
         campoMensaje = new javax.swing.JTextField();
@@ -27,16 +36,16 @@ public class VPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Chat GBF-MCD");
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        listaAmigos.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(listaAmigos);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        panelMensajes.setColumns(20);
+        panelMensajes.setRows(5);
+        jScrollPane2.setViewportView(panelMensajes);
 
         botonAmistad.setText("Enviar solicitud");
 
@@ -99,19 +108,33 @@ public class VPrincipal extends javax.swing.JFrame {
              null) == JOptionPane.YES_OPTION)==true);
     }
     
+    void informarSolicitud(String solicitado, boolean respuesta) {
+        if(respuesta) JOptionPane.showMessageDialog(this, "El usuario "+solicitado+" es ahora su amigo");
+        else JOptionPane.showMessageDialog(this, "El usuario "+solicitado+"ha rechazado su solicitud de amistad", "Solicitud rechazada", JOptionPane.ERROR_MESSAGE);
+    }
+
+    void actualizarAmigos(HashMap<String, Cliente> amigosOnline) {
+        DefaultListModel<String> lm = new DefaultListModel();
+        for(String nombreAmigo : amigosOnline.keySet()){
+            lm.addElement(nombreAmigo);
+            if(!mensajes.containsKey(nombreAmigo)) mensajes.put(nombreAmigo, "");
+        }
+        listaAmigos.setModel(lm);
+    }
+    
+    void registrarMensaje(String emisor, String mensaje) {
+        String result = this.mensajes.get(emisor) + "\n" + mensaje;
+        this.mensajes.put(emisor, result);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonAmistad;
     private javax.swing.JButton botonMensaje;
     private javax.swing.JTextField campoAmistad;
     private javax.swing.JTextField campoMensaje;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JList<String> listaAmigos;
+    private javax.swing.JTextArea panelMensajes;
     // End of variables declaration//GEN-END:variables
-
-    void informarSolicitud(String solicitado, boolean respuesta) {
-        if(respuesta) JOptionPane.showMessageDialog(this, "El usuario "+solicitado+" es ahora su amigo");
-        else JOptionPane.showMessageDialog(this, "El usuario "+solicitado+"ha rechazado su solicitud de amistad", "Solicitud rechazada", JOptionPane.ERROR_MESSAGE);
-    }
 }
