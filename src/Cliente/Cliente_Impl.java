@@ -67,12 +67,13 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
                 // Activamos la ventana principal
                 ventanaLogin.setVisible(false);
                 ventanaPrincipal.setVisible(true);
+                ventanaPrincipal.actualizarAmigos(amigosOnline);
+                this.nombreUsuario = usuario;
             }
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
         }
-        ventanaPrincipal.actualizarAmigos(amigosOnline);
-        this.nombreUsuario = usuario;
+        
     }
 
     @Override

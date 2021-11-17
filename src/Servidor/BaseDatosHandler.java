@@ -77,7 +77,7 @@ public class BaseDatosHandler {
         
         try {
             insercion = conexion.prepareStatement("INSERT INTO usuario "
-                + "VALUES (?, ?) ");
+                + "VALUES (?, crypt(?,gen_salt('md5')))");
             insercion.setString(1, nombre);
             insercion.setString(2, contrasenha);
             insercion.executeUpdate();
@@ -104,7 +104,7 @@ public class BaseDatosHandler {
         try {
             query = conexion.prepareStatement("select * "
                     + "from usuario "
-                    + "where nombre=? and contrasenha=?");
+                    + "where nombre=? and contrasenha=crypt(?,contrasenha)");
             query.setString(1, nombre);
             query.setString(2, contrasenha);
             correcto = query.executeQuery().next();

@@ -1,3 +1,5 @@
+CREATE EXTENSION pgcrypto;
+
 CREATE TABLE usuario
 (
     nombre character varying COLLATE pg_catalog."default" NOT NULL,
