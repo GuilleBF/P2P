@@ -6,11 +6,13 @@ Login:
 	✓ Mostramos solicitudes de amistad pendientes, aceptar/rechazar
 	✓ Mostramos como online, cada amigo recibe la referencia
 	✓ Le pasamos su lista de amigos online
+	Si el usuario ya está logueado, no permitirlo !!!!
 	
 En funcionamiento:
 	✓ Solicitud de amistad:
 		✓ Si está online, mandamos popup al detinatario. Hay que aceptar/rechazar
 		✓ Si no, se registra en la base de datos
+		Si el usuario es él mismo, no permitirlo !!!!
 		
 	Mensajes:
 		✓ Si se reciben, se añaden a la lista de paneles.
