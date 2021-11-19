@@ -249,4 +249,30 @@ public class BaseDatosHandler {
             System.out.println(e.getMessage());
         }
     }
+
+    public boolean sonAmigos(String usuario1, String usuario2) {
+        PreparedStatement query = null;
+        boolean amigos;
+        
+        try {
+            query = conexion.prepareStatement("select * "
+                    + "from amigo "
+                    + "where usuario1=? and usuario2=?");
+            query.setString(1, usuario1);
+            query.setString(2, usuario2);
+            amigos = query.executeQuery().next();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            amigos = true;
+        }
+        
+        // Cerramos los punteros
+        try {
+            if(query!=null) query.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+      
+        return amigos;
+    }
 }

@@ -1,6 +1,8 @@
 package Cliente;
 
 import common.Cliente;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -9,14 +11,14 @@ import javax.swing.event.ListSelectionEvent;
 public class VPrincipal extends javax.swing.JFrame {
     
     private final Cliente_Impl cliente;
-    private HashMap<String,String> mensajes;
+    private final HashMap<String,String> mensajes;
 
     public VPrincipal(Cliente_Impl cliente) {
         initComponents();
         this.cliente = cliente;
         this.mensajes = new HashMap<>();
         this.listaAmigos.addListSelectionListener((ListSelectionEvent listSelectionEvent) -> {
-            this.panelMensajes.setText(mensajes.get(this.listaAmigos.getSelectedValue()));
+            actualizarPanel();
         });
         
         this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -25,6 +27,7 @@ public class VPrincipal extends javax.swing.JFrame {
                 cliente.shutdown();
             }   
         });
+        this.getRootPane().setDefaultButton(botonMensaje);
     }
 
     @SuppressWarnings("unchecked")
@@ -124,8 +127,9 @@ public class VPrincipal extends javax.swing.JFrame {
         String mensaje = campoMensaje.getText();
         String amigo = listaAmigos.getSelectedValue();
         if(!mensaje.isEmpty() && amigo != null){
-            cliente.send(amigo, mensaje);
-            mensajes.put(amigo, mensajes.get(amigo)+"\n"+mensaje);
+            cliente.send(amigo, construirMensaje(mensaje));
+            mensajes.put(amigo, mensajes.get(amigo)+construirMensaje(mensaje));
+            actualizarPanel();
             campoMensaje.setText("");
         }
     }//GEN-LAST:event_botonMensajeActionPerformed
@@ -134,6 +138,7 @@ public class VPrincipal extends javax.swing.JFrame {
         VPeticion vPeticion = new VPeticion(solicitante,solicitado,this);
         vPeticion.setLocationRelativeTo(this);
         vPeticion.setVisible(true);
+        vPeticion.requestFocus();
     }
     
     public void responderSolicitud(VPeticion peticion, boolean respuesta){
@@ -156,8 +161,17 @@ public class VPrincipal extends javax.swing.JFrame {
     }
     
     void registrarMensaje(String emisor, String mensaje) {
-        String result = this.mensajes.get(emisor) + "\n" + mensaje;
-        this.mensajes.put(emisor, result);
+        mensajes.put(emisor, mensajes.get(emisor) + mensaje);
+        actualizarPanel();
+    }
+    
+    void actualizarPanel(){
+        if(listaAmigos.getSelectedValue() != null) panelMensajes.setText(mensajes.get(listaAmigos.getSelectedValue()));
+    }
+    
+    String construirMensaje(String mensaje){
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm");
+        return "["+LocalDateTime.now().format(formato)+"] "+mensaje+"\n";
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

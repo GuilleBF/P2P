@@ -7,6 +7,13 @@ public class VServidor extends javax.swing.JFrame {
     public VServidor(Cliente_Impl cliente) {
         initComponents();
         this.cliente = cliente;
+        this.getRootPane().setDefaultButton(boton);
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                System.exit(0);
+            }   
+        });
     }
 
     @SuppressWarnings("unchecked")

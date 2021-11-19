@@ -14,7 +14,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     private final VServidor ventanaServidor;
     private final VLogin ventanaLogin;
     private final VPrincipal ventanaPrincipal;
-    private String nombreUsuario;
+    String nombreUsuario;
     private Servidor servidor;
     private HashMap<String, Cliente> amigosOnline;
     
@@ -122,7 +122,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     }
 
     public boolean enviarSolicitud(String solicitado) {
-        if(solicitado == this.nombreUsuario) return false; // Si es él mismo no se lo permitimos
+        if(solicitado.equals(this.nombreUsuario)) return false; // Si es él mismo no se lo permitimos
         try {
             return servidor.enviarSolicitud(this.nombreUsuario, solicitado);
         } catch (RemoteException e) {

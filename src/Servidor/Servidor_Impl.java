@@ -65,11 +65,13 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
     
     @Override
     public synchronized boolean enviarSolicitud(String solicitante, String solicitado){
-        // La flag bd indica si la solicitud se ha lanzado desde la base de datos
+        
+        // Si ya son amigos, no se lo permitimos
+        if(bbdd.sonAmigos(solicitante,solicitado)) return false;
         
         Cliente cliente_solicitado = usuariosOnline.get(solicitado);
         
-        if(solicitado!=null){  // Si está online, se le manda el popup
+        if(cliente_solicitado!=null){  // Si está online, se le manda el popup
             try {
                 cliente_solicitado.popUpSolicitud(solicitante, solicitado);
                 return true;
