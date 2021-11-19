@@ -35,7 +35,7 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
 
     @Override
     public synchronized HashMap<String, Cliente> login(Cliente cliente, String nombre, String contrasenha) throws RemoteException {
-        if(bbdd.checkUsuario(nombre, contrasenha)){
+        if(bbdd.checkUsuario(nombre, contrasenha) && usuariosOnline.get(nombre) == null){
             
             // Ponemos al cliente como online
             usuariosOnline.put(nombre, cliente);
@@ -97,8 +97,10 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
         // Si el solicitante está online, le informamos de la respuesta y añadimos el uno a la lista del otro
         if(cliente_solicitante != null) try {
             cliente_solicitante.informarSolicitud(solicitado, respuesta);
-            cliente_solicitante.anadirAmigoOnline(cliente_solicitado, solicitado);
-            cliente_solicitado.anadirAmigoOnline(cliente_solicitante, solicitante);
+            if(respuesta){
+                cliente_solicitante.anadirAmigoOnline(cliente_solicitado, solicitado);
+                cliente_solicitado.anadirAmigoOnline(cliente_solicitante, solicitante);
+            }
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
         }

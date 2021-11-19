@@ -9,7 +9,7 @@ import javax.swing.event.ListSelectionEvent;
 public class VPrincipal extends javax.swing.JFrame {
     
     private final Cliente_Impl cliente;
-    private final HashMap<String,String> mensajes;
+    private HashMap<String,String> mensajes;
 
     public VPrincipal(Cliente_Impl cliente) {
         initComponents();
@@ -121,27 +121,29 @@ public class VPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonAmistadActionPerformed
 
     private void botonMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMensajeActionPerformed
-        if(!campoMensaje.getText().isEmpty()){
-            cliente.send(listaAmigos.getSelectedValue(), campoMensaje.getText());
+        String mensaje = campoMensaje.getText();
+        String amigo = listaAmigos.getSelectedValue();
+        if(!mensaje.isEmpty() && amigo != null){
+            cliente.send(amigo, mensaje);
+            mensajes.put(amigo, mensajes.get(amigo)+"\n"+mensaje);
             campoMensaje.setText("");
         }
     }//GEN-LAST:event_botonMensajeActionPerformed
 
     public void popUpSolicitud(String solicitante, String solicitado){
-        Object[] opciones = { "Aceptar", "Rechazar"};
-        cliente.responderSolicitud(solicitante, solicitado, (JOptionPane.showOptionDialog(null,
-             "El usuario "+solicitante+" quiere ser su amigo. Acepta?",
-             "Solicitud de amistad",
-             JOptionPane.YES_NO_OPTION,
-             JOptionPane.PLAIN_MESSAGE,
-             null,
-             opciones,
-             null) == JOptionPane.YES_OPTION)==true);
+        VPeticion vPeticion = new VPeticion(solicitante,solicitado,this);
+        vPeticion.setLocationRelativeTo(this);
+        vPeticion.setVisible(true);
+    }
+    
+    public void responderSolicitud(VPeticion peticion, boolean respuesta){
+        cliente.responderSolicitud(peticion.solicitante, peticion.solicitado, respuesta);
     }
     
     void informarSolicitud(String solicitado, boolean respuesta) {
-        if(respuesta) JOptionPane.showMessageDialog(this, "El usuario "+solicitado+" es ahora su amigo");
-        else JOptionPane.showMessageDialog(this, "El usuario "+solicitado+"ha rechazado su solicitud de amistad", "Solicitud rechazada", JOptionPane.ERROR_MESSAGE);
+        VRespuesta vRespuesta = new VRespuesta(solicitado, respuesta);
+        vRespuesta.setLocationRelativeTo(this);
+        vRespuesta.setVisible(true);
     }
 
     void actualizarAmigos(HashMap<String, Cliente> amigosOnline) {
