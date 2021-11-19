@@ -12,7 +12,7 @@ En funcionamiento:
 	✓ Solicitud de amistad:
 		✓ Si está online, mandamos popup al detinatario. Hay que aceptar/rechazar
 		✓ Si no, se registra en la base de datos
-		Si el usuario es él mismo, no permitirlo !!!!
+		✓ Si el usuario es él mismo, no permitirlo !!!!
 		
 	Mensajes:
 		✓ Si se reciben, se añaden a la lista de paneles.
@@ -20,4 +20,5 @@ En funcionamiento:
 	Desconexion:
 		✓ Se informa a los amigos y al servidor de la desconexión
 		
-POR HACER: funcionalidad en la GUI para enviar mensajes y peticiones
+✓ funcionalidad en la GUI para enviar mensajes y peticiones
+✓ Cuando se envia un mensaje, añadirlo a la propia conversacion
