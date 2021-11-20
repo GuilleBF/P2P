@@ -91,7 +91,7 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
     
     @Override
     public synchronized void unlogin(String usuario) throws RemoteException {
-        usuariosOnline.remove(usuario);
+        if(usuariosOnline.containsKey(usuario)) usuariosOnline.remove(usuario);
     }
     
     @Override
