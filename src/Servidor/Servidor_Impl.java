@@ -41,9 +41,9 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
             usuariosOnline.put(nombre, cliente);
             
             // Procesamos sus solicitudes de amistad guardadas
-            for(String solicitante : bbdd.obtenerSolicitudes(nombre)){
+            bbdd.obtenerSolicitudes(nombre).forEach(solicitante -> {
                 enviarSolicitud(solicitante, nombre);
-            }
+            });
             
             // Le obtenemos su lista de amigos
             ArrayList<String> amigos = bbdd.obtenerAmigos(nombre);
@@ -64,20 +64,23 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
     }
     
     @Override
-    public synchronized boolean enviarSolicitud(String solicitante, String solicitado){
+    public synchronized int enviarSolicitud(String solicitante, String solicitado){
+        // 0: registrada/enviada
+        // 1: error indefinido
+        // 2: son la misma persona
+        // 3: ya son amigos
         
-        // Si ya son amigos, no se lo permitimos
-        if(bbdd.sonAmigos(solicitante,solicitado)) return false;
+        if(bbdd.sonAmigos(solicitante,solicitado)) return 3;
+        if(solicitante.equals(solicitado)) return 2;
         
         Cliente cliente_solicitado = usuariosOnline.get(solicitado);
         
         if(cliente_solicitado!=null){  // Si está online, se le manda el popup
             try {
                 cliente_solicitado.popUpSolicitud(solicitante, solicitado);
-                return true;
+                return 0;
             } catch (RemoteException e) {
-                System.out.println(e.getMessage());
-                return false;
+                return 1;
             }
         }
         
@@ -104,7 +107,6 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
                 cliente_solicitado.anadirAmigoOnline(cliente_solicitante, solicitante);
             }
         } catch (RemoteException e) {
-            System.out.println(e.getMessage());
         }
         
         // Registramos la nueva amistad

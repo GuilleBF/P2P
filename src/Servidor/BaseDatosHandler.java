@@ -57,7 +57,6 @@ public class BaseDatosHandler {
             query.setString(1, nombre);
             existe = query.executeQuery().next();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             existe = false;
         }
         
@@ -65,7 +64,6 @@ public class BaseDatosHandler {
         try {
             if (query != null) query.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
         
         return existe;
@@ -83,7 +81,6 @@ public class BaseDatosHandler {
             insercion.executeUpdate();
             registrado = true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             registrado = false;
         }
         
@@ -91,7 +88,6 @@ public class BaseDatosHandler {
         try {
             if (insercion != null) insercion.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
         
         return registrado;
@@ -109,7 +105,6 @@ public class BaseDatosHandler {
             query.setString(2, contrasenha);
             correcto = query.executeQuery().next();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             correcto = false;
         }
         
@@ -117,7 +112,6 @@ public class BaseDatosHandler {
         try {
             if(query!=null) query.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
       
         return correcto;
@@ -138,7 +132,6 @@ public class BaseDatosHandler {
                 amigos.add(resultados.getString("usuario2"));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             amigos = null;
         }
         
@@ -146,7 +139,6 @@ public class BaseDatosHandler {
         try {
             if(query!=null) query.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
       
         return amigos;
@@ -167,7 +159,6 @@ public class BaseDatosHandler {
                 solicitantes.add(resultados.getString("solicitante"));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             solicitantes = null;
         }
         
@@ -175,15 +166,14 @@ public class BaseDatosHandler {
         try {
             if(query!=null) query.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
       
         return solicitantes;
     }
 
-    public boolean registrarSolicitud(String solicitante, String solicitado) {
+    public int registrarSolicitud(String solicitante, String solicitado) {
         PreparedStatement insercion = null;
-        boolean estado;
+        int estado;
         
         try {
             insercion = conexion.prepareStatement("INSERT INTO solicitud "
@@ -191,17 +181,15 @@ public class BaseDatosHandler {
             insercion.setString(1, solicitante);
             insercion.setString(2, solicitado);
             insercion.executeUpdate();
-            estado = true;
+            estado = 0;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            estado = false;
+            estado = 1;
         }
         
         // Cerramos los punteros
         try {
             if (insercion != null) insercion.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
         return estado;
     }
@@ -239,14 +227,12 @@ public class BaseDatosHandler {
             insercion.setString(2, solicitado);
             insercion.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
         
         // Cerramos los punteros
         try {
             if (insercion != null) insercion.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
     }
 
@@ -262,7 +248,7 @@ public class BaseDatosHandler {
             query.setString(2, usuario2);
             amigos = query.executeQuery().next();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+             // En caso de de error asumimos que son amigos para impedir que continue la solicitud
             amigos = true;
         }
         
@@ -270,7 +256,6 @@ public class BaseDatosHandler {
         try {
             if(query!=null) query.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
       
         return amigos;

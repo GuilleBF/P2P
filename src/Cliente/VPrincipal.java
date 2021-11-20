@@ -118,8 +118,19 @@ public class VPrincipal extends javax.swing.JFrame {
 
     private void botonAmistadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAmistadActionPerformed
         if(!campoAmistad.getText().isEmpty()){
-            if(cliente.enviarSolicitud(campoAmistad.getText())) JOptionPane.showMessageDialog(this, "Solicitud enviada");
-            else JOptionPane.showMessageDialog(this, "Error en el envío de la petición", "Error envío", JOptionPane.ERROR_MESSAGE);
+            switch(cliente.enviarSolicitud(campoAmistad.getText())){
+                case 0:
+                    JOptionPane.showMessageDialog(this, "Solicitud enviada");
+                    break;
+                case 1:
+                    JOptionPane.showMessageDialog(this, "Error inesperado, usuario no alcanzable", "Error envío", JOptionPane.ERROR_MESSAGE);
+                    break;
+                case 2:
+                    JOptionPane.showMessageDialog(this, "Ya eres tu propio amigo :)", "Error envío", JOptionPane.ERROR_MESSAGE);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(this, "Ya sois amigos", "Error envío", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_botonAmistadActionPerformed
 

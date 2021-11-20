@@ -121,13 +121,16 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         System.exit(0);
     }
 
-    public boolean enviarSolicitud(String solicitado) {
-        if(solicitado.equals(this.nombreUsuario)) return false; // Si es él mismo no se lo permitimos
+    public int enviarSolicitud(String solicitado) {
+        // 0: registrada/enviada
+        // 1: error indefinido
+        // 2: son la misma persona
+        // 3: ya son amigos
         try {
             return servidor.enviarSolicitud(this.nombreUsuario, solicitado);
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
-            return false;
+            return 1;
         }
     }
 
