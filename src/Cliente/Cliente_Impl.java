@@ -22,9 +22,9 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         ventanaServidor = new VServidor(this);
         ventanaServidor.setLocationRelativeTo(null);
         ventanaLogin = new VLogin(this);
-        ventanaLogin.setLocationRelativeTo(null);
+        ventanaLogin.setLocationRelativeTo(ventanaServidor);
         ventanaPrincipal = new VPrincipal(this);
-        ventanaPrincipal.setLocationRelativeTo(null);
+        ventanaPrincipal.setLocationRelativeTo(ventanaLogin);
     }
 
     public static void main(String args[]) {
@@ -122,6 +122,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     }
 
     public boolean enviarSolicitud(String solicitado) {
+        if(solicitado == this.nombreUsuario) return false; // Si es él mismo no se lo permitimos
         try {
             return servidor.enviarSolicitud(this.nombreUsuario, solicitado);
         } catch (RemoteException e) {
