@@ -56,6 +56,7 @@ public class VPrincipal extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(listaAmigos);
 
+        panelMensajes.setEditable(false);
         panelMensajes.setColumns(20);
         panelMensajes.setRows(5);
         jScrollPane2.setViewportView(panelMensajes);
@@ -138,11 +139,11 @@ public class VPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_botonAmistadActionPerformed
 
     private void botonMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMensajeActionPerformed
-        String mensaje = campoMensaje.getText();
+        String mensaje = construirMensaje(campoMensaje.getText());
         String amigo = listaAmigos.getSelectedValue();
         if(!mensaje.isEmpty() && amigo != null){
-            cliente.send(amigo, construirMensaje(mensaje));
-            mensajes.put(amigo, mensajes.get(amigo)+construirMensaje(mensaje));
+            cliente.send(amigo, mensaje);
+            mensajes.put(amigo, mensajes.get(amigo)+mensaje);
             actualizarPanel();
             campoMensaje.setText("");
         }
@@ -188,7 +189,7 @@ public class VPrincipal extends javax.swing.JFrame {
     
     String construirMensaje(String mensaje){
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm");
-        return "["+LocalDateTime.now().format(formato)+"] "+mensaje+"\n";
+        return "["+cliente.nombreUsuario+"]["+LocalDateTime.now().format(formato)+"] "+mensaje+"\n";
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
