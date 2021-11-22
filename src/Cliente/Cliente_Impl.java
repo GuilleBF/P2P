@@ -1,5 +1,6 @@
 package Cliente;
 
+import Cliente.UI.InicioLoader;
 import common.Cliente;
 import common.Servidor;
 import java.net.MalformedURLException;
@@ -25,12 +26,14 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         ventanaLogin.setLocationRelativeTo(ventanaServidor);
         ventanaPrincipal = new VPrincipal(this);
         ventanaPrincipal.setLocationRelativeTo(ventanaLogin);
+       
     }
 
     public static void main(String args[]) {
         try {
             Cliente_Impl cliente = new Cliente_Impl();
             cliente.lanzarVentanaServidor();
+            
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
         }

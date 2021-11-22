@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="320.0" maxWidth="300.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="300.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" >
+<Pane maxHeight="320.0" maxWidth="300.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="300.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Cliente.UI.InicioController">
    <children>
       <ImageView fitHeight="44.0" fitWidth="44.0" layoutX="72.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -37,7 +37,7 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Button id="botones" fx:id="btnAceptar" layoutX="75.0" layoutY="265.0" maxHeight="35.0" maxWidth="150.0" minHeight="35.0" minWidth="150.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" stylesheets="@./Estilos.css" text="ACEPTAR" textFill="WHITE">
+      <Button id="botones" fx:id="btnConectar" layoutX="75.0" layoutY="265.0" maxHeight="35.0" maxWidth="150.0" minHeight="35.0" minWidth="150.0" mnemonicParsing="false" onAction="#pulsarBtnConectar" prefHeight="35.0" prefWidth="150.0" stylesheets="@./Estilos.css" text="CONECTAR" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
