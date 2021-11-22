@@ -1,10 +1,10 @@
 package Cliente;
 
-import common.Cliente;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -168,9 +168,9 @@ public class VPrincipal extends javax.swing.JFrame {
         vRespuesta.setVisible(true);
     }
 
-    synchronized void actualizarAmigos(HashMap<String, Cliente> amigosOnline) {
+    synchronized void actualizarAmigos(Set<String> amigos) {
         DefaultListModel<String> lm = new DefaultListModel();
-        for(String nombreAmigo : amigosOnline.keySet()){
+        for(String nombreAmigo : amigos){
             lm.addElement(nombreAmigo);
             if(!mensajes.containsKey(nombreAmigo)) mensajes.put(nombreAmigo, "");
         }

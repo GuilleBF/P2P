@@ -67,7 +67,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
                 // Activamos la ventana principal
                 ventanaLogin.setVisible(false);
                 ventanaPrincipal.setVisible(true);
-                ventanaPrincipal.actualizarAmigos(amigosOnline);
+                ventanaPrincipal.actualizarAmigos(amigosOnline.keySet());
                 this.nombreUsuario = usuario;
             }
         } catch (RemoteException e) {
@@ -102,13 +102,13 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     @Override
     public synchronized void anadirAmigoOnline(Cliente amigo, String nombre) throws RemoteException {
         amigosOnline.put(nombre, amigo);
-        ventanaPrincipal.actualizarAmigos(amigosOnline);
+        ventanaPrincipal.actualizarAmigos(amigosOnline.keySet());
     }
 
     @Override
     public synchronized void eliminarAmigoOnline(String nombre) throws RemoteException {
         amigosOnline.remove(nombre);
-        ventanaPrincipal.actualizarAmigos(amigosOnline);
+        ventanaPrincipal.actualizarAmigos(amigosOnline.keySet());
     }
 
     public synchronized void shutdown() {
