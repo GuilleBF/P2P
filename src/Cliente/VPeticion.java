@@ -4,13 +4,11 @@ public class VPeticion extends javax.swing.JFrame {
 
     VPrincipal ventana;
     String solicitante;
-    String solicitado;
     boolean respondido = false;
     
-    public VPeticion(String solicitante, String solicitado, VPrincipal ventana) {
+    public VPeticion(String solicitante, VPrincipal ventana) {
         initComponents();
         this.solicitante = solicitante;
-        this.solicitado = solicitado;
         this.texto.setText("El usuario "+solicitante+" quiere ser su amigo.");
         this.ventana = ventana;
     }

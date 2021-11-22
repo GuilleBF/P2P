@@ -3,6 +3,7 @@ package Cliente;
 import common.Cliente;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -12,11 +13,13 @@ public class VPrincipal extends javax.swing.JFrame {
     
     private final Cliente_Impl cliente;
     private final HashMap<String,String> mensajes;
+    private final ArrayList<String> solicitantes;
 
     public VPrincipal(Cliente_Impl cliente) {
         initComponents();
         this.cliente = cliente;
         this.mensajes = new HashMap<>();
+        this.solicitantes = new ArrayList<>();
         this.listaAmigos.addListSelectionListener((ListSelectionEvent listSelectionEvent) -> {
             actualizarPanel();
         });
@@ -145,15 +148,18 @@ public class VPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botonMensajeActionPerformed
 
-    public void popUpSolicitud(String solicitante, String solicitado){
-        VPeticion vPeticion = new VPeticion(solicitante,solicitado,this);
+    public synchronized void popUpSolicitud(String solicitante, String solicitado){
+        if(solicitantes.contains(solicitante)) return; // Si el solicitante ya le mandó una petición, no se repite
+        solicitantes.add(solicitante);
+        VPeticion vPeticion = new VPeticion(solicitante,this);
         vPeticion.setLocationRelativeTo(this);
         vPeticion.setVisible(true);
         vPeticion.requestFocus();
     }
     
-    public void responderSolicitud(VPeticion peticion, boolean respuesta){
-        cliente.responderSolicitud(peticion.solicitante, peticion.solicitado, respuesta);
+    public synchronized void responderSolicitud(VPeticion peticion, boolean respuesta){
+        solicitantes.remove(peticion.solicitante);
+        cliente.responderSolicitud(peticion.solicitante, respuesta);
     }
     
     void informarSolicitud(String solicitado, boolean respuesta) {
@@ -162,7 +168,7 @@ public class VPrincipal extends javax.swing.JFrame {
         vRespuesta.setVisible(true);
     }
 
-    void actualizarAmigos(HashMap<String, Cliente> amigosOnline) {
+    synchronized void actualizarAmigos(HashMap<String, Cliente> amigosOnline) {
         DefaultListModel<String> lm = new DefaultListModel();
         for(String nombreAmigo : amigosOnline.keySet()){
             lm.addElement(nombreAmigo);
@@ -171,7 +177,7 @@ public class VPrincipal extends javax.swing.JFrame {
         listaAmigos.setModel(lm);
     }
     
-    void registrarMensaje(String emisor, String mensaje) {
+    synchronized void registrarMensaje(String emisor, String mensaje) {
         mensajes.put(emisor, mensajes.get(emisor) + mensaje);
         actualizarPanel();
     }

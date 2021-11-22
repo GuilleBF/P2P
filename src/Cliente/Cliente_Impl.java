@@ -86,9 +86,9 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         ventanaPrincipal.popUpSolicitud(solicitante, solicitado);
     }
 
-    public void responderSolicitud(String solicitante, String solicitado, boolean respuesta) {
+    public void responderSolicitud(String solicitante, boolean respuesta) {
         try {
-            servidor.responderSolicitud(solicitante, solicitado, respuesta);
+            servidor.responderSolicitud(solicitante, this.nombreUsuario, respuesta);
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
         }
