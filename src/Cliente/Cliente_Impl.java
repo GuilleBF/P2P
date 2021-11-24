@@ -1,6 +1,6 @@
 package Cliente;
 
-import Cliente.UI.InicioLoader;
+import Cliente.UI.AppCliente;
 import common.Cliente;
 import common.Servidor;
 import java.net.MalformedURLException;
@@ -12,37 +12,11 @@ import java.util.HashMap;
 
 public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
-    private final VServidor ventanaServidor;
-    private final VLogin ventanaLogin;
-    private final VPrincipal ventanaPrincipal;
+
     String nombreUsuario;
     private Servidor servidor;
     private HashMap<String, Cliente> amigosOnline;
-    
-    public Cliente_Impl() throws RemoteException {
-        ventanaServidor = new VServidor(this);
-        ventanaServidor.setLocationRelativeTo(null);
-        ventanaLogin = new VLogin(this);
-        ventanaLogin.setLocationRelativeTo(ventanaServidor);
-        ventanaPrincipal = new VPrincipal(this);
-        ventanaPrincipal.setLocationRelativeTo(ventanaLogin);
-       
-    }
 
-    public static void main(String args[]) {
-        try {
-            Cliente_Impl cliente = new Cliente_Impl();
-            cliente.lanzarVentanaServidor();
-            
-        } catch (RemoteException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void lanzarVentanaServidor() {
-        ventanaServidor.setLocationRelativeTo(null);
-        ventanaServidor.setVisible(true);
-    }
     
     void lanzarVentanaLogin(String nombre, int puerto) {
         try {
