@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="320.0" maxWidth="300.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="300.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Cliente.UI.InicioController">
+<Pane maxHeight="320.0" maxWidth="300.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="300.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Cliente.UI.InicioController">
    <children>
       <ImageView fitHeight="44.0" fitWidth="44.0" layoutX="72.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@./Recursos/Logo_44_44.png" />
+            <Image url="@Recursos/logo_44_44.png" />
          </image>
       </ImageView>
       <TextField id="camposTexto" fx:id="txtHost" layoutX="36.0" layoutY="128.0" maxHeight="36.0" maxWidth="228.0" minHeight="36.0" minWidth="228.0" prefHeight="36.0" prefWidth="228.0" stylesheets="@./Estilos.css">
