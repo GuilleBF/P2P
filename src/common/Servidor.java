@@ -10,7 +10,7 @@ public interface Servidor extends Remote {
     
     public HashMap<String, Cliente> login(Cliente cliente, String nombre, String contrasenha) throws RemoteException;
     
-    public boolean enviarSolicitud(String solicitante, String solicitado) throws RemoteException;
+    public int enviarSolicitud(String solicitante, String solicitado) throws RemoteException;
 
     public void responderSolicitud(String solicitante, String solicitado, boolean respuesta) throws RemoteException;
 

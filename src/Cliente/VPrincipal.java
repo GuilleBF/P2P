@@ -1,7 +1,10 @@
 package Cliente;
 
-import common.Cliente;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -9,14 +12,16 @@ import javax.swing.event.ListSelectionEvent;
 public class VPrincipal extends javax.swing.JFrame {
     
     private final Cliente_Impl cliente;
-    private HashMap<String,String> mensajes;
+    private final HashMap<String,String> mensajes;
+    private final ArrayList<String> solicitantes;
 
     public VPrincipal(Cliente_Impl cliente) {
         initComponents();
         this.cliente = cliente;
         this.mensajes = new HashMap<>();
+        this.solicitantes = new ArrayList<>();
         this.listaAmigos.addListSelectionListener((ListSelectionEvent listSelectionEvent) -> {
-            this.panelMensajes.setText(mensajes.get(this.listaAmigos.getSelectedValue()));
+            actualizarPanel();
         });
         
         this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -25,6 +30,7 @@ public class VPrincipal extends javax.swing.JFrame {
                 cliente.shutdown();
             }   
         });
+        this.getRootPane().setDefaultButton(botonMensaje);
     }
 
     @SuppressWarnings("unchecked")
@@ -50,6 +56,7 @@ public class VPrincipal extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(listaAmigos);
 
+        panelMensajes.setEditable(false);
         panelMensajes.setColumns(20);
         panelMensajes.setRows(5);
         jScrollPane2.setViewportView(panelMensajes);
@@ -115,29 +122,45 @@ public class VPrincipal extends javax.swing.JFrame {
 
     private void botonAmistadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAmistadActionPerformed
         if(!campoAmistad.getText().isEmpty()){
-            if(cliente.enviarSolicitud(campoAmistad.getText())) JOptionPane.showMessageDialog(this, "Solicitud enviada");
-            else JOptionPane.showMessageDialog(this, "Error en el envío de la petición", "Error envío", JOptionPane.ERROR_MESSAGE);
+            switch(cliente.enviarSolicitud(campoAmistad.getText())){
+                case 0:
+                    JOptionPane.showMessageDialog(this, "Solicitud enviada");
+                    break;
+                case 1:
+                    JOptionPane.showMessageDialog(this, "Error inesperado, usuario no alcanzable", "Error envío", JOptionPane.ERROR_MESSAGE);
+                    break;
+                case 2:
+                    JOptionPane.showMessageDialog(this, "Ya eres tu propio amigo :)", "Error envío", JOptionPane.ERROR_MESSAGE);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(this, "Ya sois amigos", "Error envío", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_botonAmistadActionPerformed
 
     private void botonMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMensajeActionPerformed
-        String mensaje = campoMensaje.getText();
+        String mensaje = construirMensaje(campoMensaje.getText());
         String amigo = listaAmigos.getSelectedValue();
         if(!mensaje.isEmpty() && amigo != null){
             cliente.send(amigo, mensaje);
-            mensajes.put(amigo, mensajes.get(amigo)+"\n"+mensaje);
+            mensajes.put(amigo, mensajes.get(amigo)+mensaje);
+            actualizarPanel();
             campoMensaje.setText("");
         }
     }//GEN-LAST:event_botonMensajeActionPerformed
 
-    public void popUpSolicitud(String solicitante, String solicitado){
-        VPeticion vPeticion = new VPeticion(solicitante,solicitado,this);
+    public synchronized void popUpSolicitud(String solicitante, String solicitado){
+        if(solicitantes.contains(solicitante)) return; // Si el solicitante ya le mandó una petición, no se repite
+        solicitantes.add(solicitante);
+        VPeticion vPeticion = new VPeticion(solicitante,this);
         vPeticion.setLocationRelativeTo(this);
         vPeticion.setVisible(true);
+        vPeticion.requestFocus();
     }
     
-    public void responderSolicitud(VPeticion peticion, boolean respuesta){
-        cliente.responderSolicitud(peticion.solicitante, peticion.solicitado, respuesta);
+    public synchronized void responderSolicitud(VPeticion peticion, boolean respuesta){
+        solicitantes.remove(peticion.solicitante);
+        cliente.responderSolicitud(peticion.solicitante, respuesta);
     }
     
     void informarSolicitud(String solicitado, boolean respuesta) {
@@ -146,18 +169,27 @@ public class VPrincipal extends javax.swing.JFrame {
         vRespuesta.setVisible(true);
     }
 
-    void actualizarAmigos(HashMap<String, Cliente> amigosOnline) {
+    synchronized void actualizarAmigos(Set<String> amigos) {
         DefaultListModel<String> lm = new DefaultListModel();
-        for(String nombreAmigo : amigosOnline.keySet()){
+        for(String nombreAmigo : amigos){
             lm.addElement(nombreAmigo);
             if(!mensajes.containsKey(nombreAmigo)) mensajes.put(nombreAmigo, "");
         }
         listaAmigos.setModel(lm);
     }
     
-    void registrarMensaje(String emisor, String mensaje) {
-        String result = this.mensajes.get(emisor) + "\n" + mensaje;
-        this.mensajes.put(emisor, result);
+    synchronized void registrarMensaje(String emisor, String mensaje) {
+        mensajes.put(emisor, mensajes.get(emisor) + mensaje);
+        actualizarPanel();
+    }
+    
+    void actualizarPanel(){
+        if(listaAmigos.getSelectedValue() != null) panelMensajes.setText(mensajes.get(listaAmigos.getSelectedValue()));
+    }
+    
+    String construirMensaje(String mensaje){
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm");
+        return "["+cliente.nombreUsuario+"]["+LocalDateTime.now().format(formato)+"] "+mensaje+"\n";
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -15,7 +15,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     private final VServidor ventanaServidor;
     private final VLogin ventanaLogin;
     private final VPrincipal ventanaPrincipal;
-    private String nombreUsuario;
+    String nombreUsuario;
     private Servidor servidor;
     private HashMap<String, Cliente> amigosOnline;
     
@@ -70,7 +70,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
                 // Activamos la ventana principal
                 ventanaLogin.setVisible(false);
                 ventanaPrincipal.setVisible(true);
-                ventanaPrincipal.actualizarAmigos(amigosOnline);
+                ventanaPrincipal.actualizarAmigos(amigosOnline.keySet());
                 this.nombreUsuario = usuario;
             }
         } catch (RemoteException e) {
@@ -89,9 +89,9 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         ventanaPrincipal.popUpSolicitud(solicitante, solicitado);
     }
 
-    public void responderSolicitud(String solicitante, String solicitado, boolean respuesta) {
+    public void responderSolicitud(String solicitante, boolean respuesta) {
         try {
-            servidor.responderSolicitud(solicitante, solicitado, respuesta);
+            servidor.responderSolicitud(solicitante, this.nombreUsuario, respuesta);
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
         }
@@ -105,13 +105,13 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     @Override
     public synchronized void anadirAmigoOnline(Cliente amigo, String nombre) throws RemoteException {
         amigosOnline.put(nombre, amigo);
-        ventanaPrincipal.actualizarAmigos(amigosOnline);
+        ventanaPrincipal.actualizarAmigos(amigosOnline.keySet());
     }
 
     @Override
     public synchronized void eliminarAmigoOnline(String nombre) throws RemoteException {
         amigosOnline.remove(nombre);
-        ventanaPrincipal.actualizarAmigos(amigosOnline);
+        ventanaPrincipal.actualizarAmigos(amigosOnline.keySet());
     }
 
     public synchronized void shutdown() {
@@ -124,13 +124,16 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         System.exit(0);
     }
 
-    public boolean enviarSolicitud(String solicitado) {
-        if(solicitado == this.nombreUsuario) return false; // Si es él mismo no se lo permitimos
+    public int enviarSolicitud(String solicitado) {
+        // 0: registrada/enviada
+        // 1: error indefinido
+        // 2: son la misma persona
+        // 3: ya son amigos
         try {
             return servidor.enviarSolicitud(this.nombreUsuario, solicitado);
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
-            return false;
+            return 1;
         }
     }
 

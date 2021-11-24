@@ -1,6 +1,7 @@
 package Cliente;
 
 import javax.swing.JOptionPane;
+import javax.swing.event.ChangeEvent;
 
 public class VLogin extends javax.swing.JFrame {
 
@@ -9,6 +10,17 @@ public class VLogin extends javax.swing.JFrame {
     public VLogin(Cliente_Impl cliente) {
         initComponents();
         this.cliente = cliente;
+        this.getRootPane().setDefaultButton(botonLogin);
+        this.jTabbedPane1.addChangeListener((ChangeEvent ce) -> {
+            if(jTabbedPane1.getSelectedIndex()==0) this.getRootPane().setDefaultButton(botonLogin);
+            else this.getRootPane().setDefaultButton(botonRegistro);
+        });
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                System.exit(0);
+            }   
+        });
     }
 
     @SuppressWarnings("unchecked")
