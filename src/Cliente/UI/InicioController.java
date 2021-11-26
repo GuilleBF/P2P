@@ -1,15 +1,16 @@
 package Cliente.UI;
 
+import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 
 public class InicioController {
-
+    
+    private final AppCliente app;
+    
     @FXML
     private Button btnConectar;
 
@@ -28,14 +29,13 @@ public class InicioController {
     @FXML
     private TextField txtPuerto;
 
-    @FXML
-    public void initialize() {
+    public InicioController(AppCliente app) {
+        this.app = app;
     }
 
     @FXML
-    protected void pulsarBtnConectar(ActionEvent e) {
-        System.out.println("Hola");
-        labelHost.setText("Hola");
+    void pulsarBtnConectar(ActionEvent e) {
+        app.lanzarVentanaLogin(txtHost.getText(), Integer.parseInt(txtPuerto.getText()));
     }
 
 }

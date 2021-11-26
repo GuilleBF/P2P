@@ -81,7 +81,7 @@ public class VServidor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonActionPerformed
-        cliente.lanzarVentanaLogin(campoNombre.getText(),Integer.parseInt(campoPuerto.getText()));
+        // cliente.lanzarVentanaLogin(campoNombre.getText(),Integer.parseInt(campoPuerto.getText()));
     }//GEN-LAST:event_botonActionPerformed
 
 

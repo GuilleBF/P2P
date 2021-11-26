@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane maxHeight="560.0" maxWidth="300.0" minHeight="560.0" minWidth="300.0" prefHeight="560.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="560.0" maxWidth="300.0" minHeight="560.0" minWidth="300.0" prefHeight="560.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Cliente.UI.LoginController">
    <children>
       <TextField id="camposTexto" fx:id="txtHost" layoutX="36.0" layoutY="280.0" maxHeight="36.0" maxWidth="228.0" minHeight="36.0" minWidth="228.0" prefHeight="36.0" prefWidth="228.0" stylesheets="@Estilos.css">
          <effect>
