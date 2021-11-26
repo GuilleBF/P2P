@@ -12,6 +12,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     private HashMap<String, Cliente> amigosOnline;
     
     public Cliente_Impl() throws RemoteException{
+        
     }
 
     

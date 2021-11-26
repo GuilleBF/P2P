@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMain.java to edit this template
- */
 package Cliente.UI;
 
 import Cliente.Cliente_Impl;
@@ -46,6 +42,11 @@ public class AppCliente extends Application {
         }
     }
     
+    @Override
+    public void stop(){
+        System.exit(0);
+    }
+    
     public void lanzarVentanaLogin(String nombre, int puerto) {
         try {
             this.servidor = (Servidor) Naming.lookup("rmi://" + nombre + ":" + puerto + "/servidor");
@@ -55,7 +56,7 @@ public class AppCliente extends Application {
         } catch (NotBoundException | MalformedURLException | RemoteException e) {
             this.alertaError.setContentText("Error en la conexión al servidor");
             this.alertaError.show();
-        } catch (IOException ex) {
+        } catch (IOException e) {
             this.alertaError.setContentText("No se pudo cargar la ventana de login");
             this.alertaError.show();
         }
