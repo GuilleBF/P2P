@@ -35,7 +35,7 @@ public class InicioController {
 
     @FXML
     void pulsarBtnConectar(ActionEvent e) {
-        if(!txtHost.getText().isBlank() && !txtPuerto.getText().isBlank())
+        if(!txtHost.getText().isEmpty() && !txtPuerto.getText().isEmpty())
             app.lanzarVentanaLogin(txtHost.getText(), Integer.parseInt(txtPuerto.getText()));
     }
 

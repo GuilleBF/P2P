@@ -12,3 +12,10 @@
     -fx-color: #ffffff;
     -fx-border-radius: 5px;
 }
+
+#marcosBotones {
+
+    -fx-border-color : #9A19FF;
+    -fx-border-radius: 25px;
+    -fx-background: none ;
+}
