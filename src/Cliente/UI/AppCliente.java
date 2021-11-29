@@ -150,9 +150,11 @@ public class AppCliente extends Application {
         controladorPrincipal.actualizarAmigos(amigos);
     }
 
-    public void popUpSolicitud(String solicitante, String solicitado) {
+    public synchronized void popUpSolicitud(String solicitante, String solicitado) {
         try {
+            if(solicitantes.contains(solicitante)) return; // Si el solicitante ya le mandó una petición, no se repite
             // Lanzamos popup
+            solicitantes.add(solicitante);
             Stage nuevoEscenario = new Stage();
             nuevoEscenario.initModality(Modality.NONE);
             FXMLLoader amistadLoader = new FXMLLoader(AppCliente.class.getResource("SolicitudAmistad.fxml"));
@@ -163,7 +165,8 @@ public class AppCliente extends Application {
         }
     }
 
-    public void responderSolicitud(String solicitante, boolean respuesta) {
+    public synchronized void responderSolicitud(String solicitante, boolean respuesta) {
+        solicitantes.remove(solicitante);
         cliente.responderSolicitud(solicitante, respuesta);
     }
 
@@ -174,4 +177,6 @@ public class AppCliente extends Application {
             alerta.setContentText("El usuario "+solicitado+" ha rechazado su peticion");
         alerta.show();
     }
+    
+    
 }
