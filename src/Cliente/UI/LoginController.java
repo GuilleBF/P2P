@@ -19,18 +19,25 @@ public class LoginController {
     }
             
     @FXML
-    void pulsarBtnLogin(ActionEvent e) {
-        String usuario = txtUsuario.getText();
-        String contra = txtPassword.getText();
-        if(!usuario.isBlank() && !contra.isBlank())
-            app.registrar(usuario, contra);
-    }
-    
-    @FXML
     void pulsarBtnRegistro(ActionEvent e) {
         String usuario = txtUsuario.getText();
         String contra = txtPassword.getText();
-        if(!usuario.isBlank() && !contra.isBlank())
+        if(!usuario.isBlank() && !contra.isBlank()){
+            app.registrar(usuario, contra);
+            txtPassword.setText("");
+            txtUsuario.setText("");
+        }
+            
+    }
+    
+    @FXML
+    void pulsarBtnLogin(ActionEvent e) {
+        String usuario = txtUsuario.getText();
+        String contra = txtPassword.getText();
+        if(!usuario.isBlank() && !contra.isBlank()){
             app.login(usuario, contra);
+            txtPassword.setText("");
+            txtUsuario.setText("");
+        }
     }
 }

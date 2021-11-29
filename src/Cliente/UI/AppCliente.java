@@ -73,7 +73,7 @@ public class AppCliente extends Application {
         }
     }
     
-    void registrar(String usuario, String contrasenha) {
+    public void registrar(String usuario, String contrasenha) {
         // Informamos del estado del registro
         try {
             switch(cliente.registrar(usuario, contrasenha)){
@@ -92,7 +92,7 @@ public class AppCliente extends Application {
         }
     }
     
-    void login(String usuario, String contra) {
+    public void login(String usuario, String contra) {
         // Si login correcto, lanzamos la ventana principal
         if(cliente.login(usuario, contra)){
             try {
