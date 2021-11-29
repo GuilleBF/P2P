@@ -5,12 +5,11 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane maxHeight="200.0" maxWidth="400.0" minHeight="200.0" minWidth="400.0" prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="200.0" maxWidth="400.0" minHeight="200.0" minWidth="400.0" prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="23.0" layoutY="44.0" text="X te ha enviado una petición de amistad">
+      <Label layoutX="17.0" layoutY="46.0" text="X te ha enviado una petición de amistad">
          <font>
-            <Font size="20.0" />
+            <Font size="18.0" />
          </font>
       </Label>
       <Button id="botones" fx:id="btnConectar" defaultButton="true" layoutX="217.0" layoutY="123.0" maxHeight="35.0" maxWidth="150.0" minHeight="35.0" minWidth="150.0" mnemonicParsing="false" onAction="#pulsarBtnConectar" prefHeight="35.0" prefWidth="150.0" stylesheets="@Estilos.css" text="ACEPTAR" textFill="WHITE">

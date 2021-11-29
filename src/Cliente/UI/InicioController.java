@@ -1,27 +1,12 @@
 package Cliente.UI;
 
-import javafx.application.Application;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 
 public class InicioController {
     
     private final AppCliente app;
-    
-    @FXML
-    private Button btnConectar;
-
-    @FXML
-    private Label labelHost;
-
-    @FXML
-    private Label labelLogo;
-
-    @FXML
-    private Label labelPuerto;
 
     @FXML
     private TextField txtHost;
@@ -35,8 +20,10 @@ public class InicioController {
 
     @FXML
     void pulsarBtnConectar(ActionEvent e) {
-        if(!txtHost.getText().isEmpty() && !txtPuerto.getText().isEmpty())
-            app.lanzarVentanaLogin(txtHost.getText(), Integer.parseInt(txtPuerto.getText()));
+        String usuario = txtHost.getText();
+        String puerto = txtPuerto.getText();
+        if(!usuario.isBlank() && !puerto.isBlank())
+            app.lanzarVentanaLogin(usuario, Integer.parseInt(puerto));
     }
 
 }

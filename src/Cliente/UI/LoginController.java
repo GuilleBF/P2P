@@ -1,29 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Cliente.UI;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 
-/**
- *
- * @author guille
- */
 public class LoginController {
     
     private final AppCliente app;
     
+    @FXML
+    private TextField txtUsuario;
+    
+    @FXML
+    private TextField txtPassword;
+        
     public LoginController(AppCliente app) {
         this.app = app;
     }
-    
-    
             
     @FXML
-    void pulsarBtnConectar(ActionEvent e) {
-        
+    void pulsarBtnLogin(ActionEvent e) {
+        String usuario = txtUsuario.getText();
+        String contra = txtPassword.getText();
+        if(!usuario.isBlank() && !contra.isBlank())
+            app.registrar(usuario, contra);
+    }
+    
+    @FXML
+    void pulsarBtnRegistro(ActionEvent e) {
+        String usuario = txtUsuario.getText();
+        String contra = txtPassword.getText();
+        if(!usuario.isBlank() && !contra.isBlank())
+            app.login(usuario, contra);
     }
 }

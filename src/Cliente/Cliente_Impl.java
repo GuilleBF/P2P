@@ -1,6 +1,8 @@
 package Cliente;
 
+import Cliente.UI.AppCliente;
 import common.Cliente;
+import common.Servidor;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
@@ -10,40 +12,34 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
     String nombreUsuario;
     private HashMap<String, Cliente> amigosOnline;
+    private final Servidor servidor;
+    private final AppCliente app;
     
-    public Cliente_Impl() throws RemoteException{
-        
-    }
-
-    
-    void registrar(String usuario, String contrasenha) {
-//        try {
-//            ventanaLogin.estadoRegistro(servidor.registrar(usuario, contrasenha));
-//        } catch (RemoteException e) {
-//            System.out.println(e.getMessage());
-//        }
+    public Cliente_Impl(Servidor servidor, AppCliente app) throws RemoteException{
+        this.servidor = servidor;
+        this.app = app;
     }
     
-    public synchronized void login(String usuario, String contrasenha) {
-//        try {
-//            amigosOnline = servidor.login(this, usuario, contrasenha);
-//            if(amigosOnline == null) ventanaLogin.loginErroneo();
-//            else{
-//                // Activamos la ventana principal
-//                ventanaLogin.setVisible(false);
-//                ventanaPrincipal.setVisible(true);
-//                ventanaPrincipal.actualizarAmigos(amigosOnline.keySet());
-//                this.nombreUsuario = usuario;
-//            }
-//        } catch (RemoteException e) {
-//            System.out.println(e.getMessage());
-//        }
-//        
+    public int registrar(String usuario, String contrasenha) throws RemoteException {
+        return servidor.registrar(usuario, contrasenha);
+    }
+    
+    public synchronized boolean login(String usuario, String contrasenha) {
+        try {
+            amigosOnline = servidor.login(this, usuario, contrasenha);
+            if(amigosOnline == null) return false;
+            else{
+                this.nombreUsuario = usuario;
+                return true;
+            }
+        } catch (RemoteException e) {
+            return false;
+        }
     }
 
     @Override
     public void enviarMensaje(String emisor, String mensaje) throws RemoteException {
-//        ventanaPrincipal.registrarMensaje(emisor, mensaje);
+        app.registrarMensaje(emisor, mensaje);
     }
 
     @Override
@@ -91,21 +87,20 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         // 1: error indefinido
         // 2: son la misma persona
         // 3: ya son amigos
-//        try {
-//            return servidor.enviarSolicitud(this.nombreUsuario, solicitado);
-//        } catch (RemoteException e) {
-//            System.out.println(e.getMessage());
-//            return 1;
-//        }
-        return 0;
+        try {
+            return servidor.enviarSolicitud(this.nombreUsuario, solicitado);
+        } catch (RemoteException e) {
+            System.out.println(e.getMessage());
+            return 1;
+        }
     }
 
-    void send(String amigo, String mensaje) {
-//        try {
-//            amigosOnline.get(amigo).enviarMensaje(nombreUsuario, mensaje);
-//        } catch (RemoteException e) {
-//            System.out.println(e.getMessage());
-//        }
+    public void send(String amigo, String mensaje) throws RemoteException {
+        amigosOnline.get(amigo).enviarMensaje(nombreUsuario, mensaje);
+    }
+
+    public String getNombreUsuario() {
+        return this.nombreUsuario;
     }
     
 }
