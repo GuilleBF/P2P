@@ -3,7 +3,6 @@ package Cliente.UI;
 import java.awt.TextArea;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import javafx.beans.value.ChangeListener;
