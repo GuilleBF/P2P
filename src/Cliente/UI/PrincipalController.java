@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Set;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,11 +37,8 @@ public class PrincipalController {
         this.mensajes = new HashMap<>();
         
         // Añadimos el listener a la lista
-        listaAmigos.getSelectionModel().selectedItemProperty().addListener(new ChangeListener(){
-            @Override
-            public void changed(ObservableValue ov, Object t, Object t1) {
-                actualizarPanel();
-            }
+        listaAmigos.getSelectionModel().selectedItemProperty().addListener((ObservableValue ov, Object t, Object t1) -> {
+            actualizarPanel();
         });
     }
             
