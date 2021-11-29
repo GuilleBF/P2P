@@ -1,114 +1,73 @@
 package Cliente;
 
+import Cliente.UI.AppCliente;
 import common.Cliente;
 import common.Servidor;
-import java.net.MalformedURLException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 
 public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
-    private final VServidor ventanaServidor;
-    private final VLogin ventanaLogin;
-    private final VPrincipal ventanaPrincipal;
     String nombreUsuario;
-    private Servidor servidor;
     private HashMap<String, Cliente> amigosOnline;
+    private final Servidor servidor;
+    private final AppCliente app;
     
-    public Cliente_Impl() throws RemoteException {
-        ventanaServidor = new VServidor(this);
-        ventanaServidor.setLocationRelativeTo(null);
-        ventanaLogin = new VLogin(this);
-        ventanaLogin.setLocationRelativeTo(ventanaServidor);
-        ventanaPrincipal = new VPrincipal(this);
-        ventanaPrincipal.setLocationRelativeTo(ventanaLogin);
-    }
-
-    public static void main(String args[]) {
-        try {
-            Cliente_Impl cliente = new Cliente_Impl();
-            cliente.lanzarVentanaServidor();
-        } catch (RemoteException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void lanzarVentanaServidor() {
-        ventanaServidor.setLocationRelativeTo(null);
-        ventanaServidor.setVisible(true);
+    public Cliente_Impl(Servidor servidor, AppCliente app) throws RemoteException{
+        this.servidor = servidor;
+        this.app = app;
     }
     
-    void lanzarVentanaLogin(String nombre, int puerto) {
-        try {
-            this.servidor = (Servidor) Naming.lookup("rmi://" + nombre + ":" + puerto + "/servidor");
-            ventanaServidor.setVisible(false);
-            ventanaLogin.setVisible(true);
-        } catch (NotBoundException | MalformedURLException | RemoteException e) {
-            System.out.println(e.getMessage());
-        }
+    public int registrar(String usuario, String contrasenha) throws RemoteException {
+        return servidor.registrar(usuario, contrasenha);
     }
     
-    void registrar(String usuario, String contrasenha) {
-        try {
-            ventanaLogin.estadoRegistro(servidor.registrar(usuario, contrasenha));
-        } catch (RemoteException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-    
-    public synchronized void login(String usuario, String contrasenha) {
+    public synchronized boolean login(String usuario, String contrasenha) {
         try {
             amigosOnline = servidor.login(this, usuario, contrasenha);
-            if(amigosOnline == null) ventanaLogin.loginErroneo();
+            if(amigosOnline == null) return false;
             else{
-                // Activamos la ventana principal
-                ventanaLogin.setVisible(false);
-                ventanaPrincipal.setVisible(true);
-                ventanaPrincipal.actualizarAmigos(amigosOnline.keySet());
                 this.nombreUsuario = usuario;
+                return true;
             }
         } catch (RemoteException e) {
-            System.out.println(e.getMessage());
+            return false;
         }
-        
     }
 
     @Override
     public void enviarMensaje(String emisor, String mensaje) throws RemoteException {
-        ventanaPrincipal.registrarMensaje(emisor, mensaje);
+        app.registrarMensaje(emisor, mensaje);
     }
 
     @Override
     public void popUpSolicitud(String solicitante, String solicitado) {
-        ventanaPrincipal.popUpSolicitud(solicitante, solicitado);
+        app.popUpSolicitud(solicitante, solicitado);
     }
 
     public void responderSolicitud(String solicitante, boolean respuesta) {
         try {
             servidor.responderSolicitud(solicitante, this.nombreUsuario, respuesta);
         } catch (RemoteException e) {
-            System.out.println(e.getMessage());
         }
     }
 
     @Override
     public void informarSolicitud(String solicitado, boolean respuesta) {
-        ventanaPrincipal.informarSolicitud(solicitado, respuesta);
+        app.informarSolicitud(solicitado, respuesta);
     }
 
     @Override
     public synchronized void anadirAmigoOnline(Cliente amigo, String nombre) throws RemoteException {
         amigosOnline.put(nombre, amigo);
-        ventanaPrincipal.actualizarAmigos(amigosOnline.keySet());
+        app.actualizarAmigos(amigosOnline.keySet());
     }
 
     @Override
     public synchronized void eliminarAmigoOnline(String nombre) throws RemoteException {
         amigosOnline.remove(nombre);
-        ventanaPrincipal.actualizarAmigos(amigosOnline.keySet());
+        app.actualizarAmigos(amigosOnline.keySet());
     }
 
     public synchronized void shutdown() {
@@ -134,12 +93,12 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         }
     }
 
-    void send(String amigo, String mensaje) {
-        try {
-            amigosOnline.get(amigo).enviarMensaje(nombreUsuario, mensaje);
-        } catch (RemoteException e) {
-            System.out.println(e.getMessage());
-        }
+    public void send(String amigo, String mensaje) throws RemoteException {
+        amigosOnline.get(amigo).enviarMensaje(nombreUsuario, mensaje);
+    }
+
+    public String getNombreUsuario() {
+        return this.nombreUsuario;
     }
     
 }

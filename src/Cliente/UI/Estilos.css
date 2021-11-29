@@ -1,0 +1,21 @@
+
+#camposTexto {
+
+    -fx-border-color : #9A19FF;
+    -fx-border-radius: 5px;
+    -fx-background: none ;
+}
+
+#botones {
+    -fx-border-color: none;
+    -fx-background-color: #9A19FF;
+    -fx-color: #ffffff;
+    -fx-border-radius: 5px;
+}
+
+#marcosBotones {
+
+    -fx-border-color : #9A19FF;
+    -fx-border-radius: 25px;
+    -fx-background: none ;
+}
