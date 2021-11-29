@@ -35,6 +35,7 @@ public class AppCliente extends Application {
        
         this.escenario = primaryStage;
         this.alertaError = new Alert(AlertType.ERROR);
+        this.alerta = new Alert(AlertType.INFORMATION);
         this.solicitantes = new ArrayList<>();
         
         try{
@@ -83,9 +84,11 @@ public class AppCliente extends Application {
                     break;
                 case 1:
                     alertaError.setContentText("El usuario ya existe");
+                    alertaError.show();
                     break;
                 case 2:
                     alertaError.setContentText("Error de conexión, vuelva a intentarlo");
+                    alertaError.show();
             }
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
@@ -103,11 +106,12 @@ public class AppCliente extends Application {
             } catch (IOException ex) {
                 this.alertaError.setContentText("No se pudo cargar la ventana principal");
                 this.alertaError.show();
+                System.out.println(ex.getMessage());
             }
         }else{
             // Error en el login
-            alertaError.setContentText("Error en el login");
-            alertaError.show();
+            this.alertaError.setContentText("Error en el login");
+            this.alertaError.show();
         }
     }
 
