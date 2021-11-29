@@ -3,11 +3,14 @@ package Cliente.UI;
 import java.awt.TextArea;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -31,6 +34,7 @@ public class PrincipalController {
     private ListView listaAmigos;
         
     public PrincipalController(AppCliente app) {
+        
         this.app = app;
         this.mensajes = new HashMap<>();
         
@@ -73,6 +77,16 @@ public class PrincipalController {
     void pulsarBtnAmistad(ActionEvent e) {
         if(!txtAmistad.getText().isBlank())
             app.enviarSolicitud(txtAmistad.getText());
+    }
+
+    synchronized void actualizarAmigos(Set<String> amigos) {
+        ObservableList<String> lista = FXCollections.observableArrayList();
+        
+        for(String nombreAmigo : amigos){
+            lista.add(nombreAmigo);
+            if(!mensajes.containsKey(nombreAmigo)) mensajes.put(nombreAmigo, "");
+        }
+        listaAmigos.setItems(lista);
     }
     
 }

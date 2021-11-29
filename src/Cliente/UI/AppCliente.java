@@ -7,29 +7,35 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.Set;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class AppCliente extends Application {
     
     private Cliente_Impl cliente;
-    private Servidor servidor;
     private Stage escenario;
     private Alert alertaError;
     private Alert alerta;
     private PrincipalController controladorPrincipal;
+    private ArrayList<String> solicitantes;
+    
+    public static void main(String[] args) {
+        launch(); 
+    }
     
     @Override
     public void start(Stage primaryStage) {
        
         this.escenario = primaryStage;
         this.alertaError = new Alert(AlertType.ERROR);
+        this.solicitantes = new ArrayList<>();
         
         try{
             
@@ -47,7 +53,6 @@ public class AppCliente extends Application {
     @Override
     public void stop(){
         cliente.shutdown();
-        System.exit(0);
     }
     
     public void lanzarVentanaLogin(String nombre, int puerto) {
@@ -105,10 +110,6 @@ public class AppCliente extends Application {
             alertaError.show();
         }
     }
-    
-    public static void main(String[] args) {
-        launch(); 
-    }
 
     public void registrarMensaje(String emisor, String mensaje) {
         controladorPrincipal.registrarMensaje(emisor, mensaje);
@@ -145,6 +146,32 @@ public class AppCliente extends Application {
             }
     }
 
-    
-    
+    public void actualizarAmigos(Set<String> amigos) {
+        controladorPrincipal.actualizarAmigos(amigos);
+    }
+
+    public void popUpSolicitud(String solicitante, String solicitado) {
+        try {
+            // Lanzamos popup
+            Stage nuevoEscenario = new Stage();
+            nuevoEscenario.initModality(Modality.NONE);
+            FXMLLoader amistadLoader = new FXMLLoader(AppCliente.class.getResource("SolicitudAmistad.fxml"));
+            amistadLoader.setControllerFactory(c -> new SolicitudController(this, solicitante));
+            nuevoEscenario.setScene(new Scene(amistadLoader.load()));
+            nuevoEscenario.show();
+        } catch (IOException ex) {
+        }
+    }
+
+    public void responderSolicitud(String solicitante, boolean respuesta) {
+        cliente.responderSolicitud(solicitante, respuesta);
+    }
+
+    public void informarSolicitud(String solicitado, boolean respuesta) {
+        if(respuesta)
+            alerta.setContentText("Ahora es amigo de "+solicitado);
+        else
+            alerta.setContentText("El usuario "+solicitado+" ha rechazado su peticion");
+        alerta.show();
+    }
 }

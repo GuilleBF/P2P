@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
-
     String nombreUsuario;
     private HashMap<String, Cliente> amigosOnline;
     private final Servidor servidor;
@@ -44,42 +43,41 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
     @Override
     public void popUpSolicitud(String solicitante, String solicitado) {
-//        ventanaPrincipal.popUpSolicitud(solicitante, solicitado);
+        app.popUpSolicitud(solicitante, solicitado);
     }
 
     public void responderSolicitud(String solicitante, boolean respuesta) {
-//        try {
-//            servidor.responderSolicitud(solicitante, this.nombreUsuario, respuesta);
-//        } catch (RemoteException e) {
-//            System.out.println(e.getMessage());
-//        }
+        try {
+            servidor.responderSolicitud(solicitante, this.nombreUsuario, respuesta);
+        } catch (RemoteException e) {
+        }
     }
 
     @Override
     public void informarSolicitud(String solicitado, boolean respuesta) {
-//        ventanaPrincipal.informarSolicitud(solicitado, respuesta);
+        app.informarSolicitud(solicitado, respuesta);
     }
 
     @Override
     public synchronized void anadirAmigoOnline(Cliente amigo, String nombre) throws RemoteException {
-//        amigosOnline.put(nombre, amigo);
-//        ventanaPrincipal.actualizarAmigos(amigosOnline.keySet());
+        amigosOnline.put(nombre, amigo);
+        app.actualizarAmigos(amigosOnline.keySet());
     }
 
     @Override
     public synchronized void eliminarAmigoOnline(String nombre) throws RemoteException {
-//        amigosOnline.remove(nombre);
-//        ventanaPrincipal.actualizarAmigos(amigosOnline.keySet());
+        amigosOnline.remove(nombre);
+        app.actualizarAmigos(amigosOnline.keySet());
     }
 
     public synchronized void shutdown() {
-//        try {
-//            for(Cliente amigo:amigosOnline.values()) amigo.eliminarAmigoOnline(nombreUsuario);
-//            servidor.unlogin(nombreUsuario);
-//        } catch (RemoteException e) {
-//            System.out.println(e.getMessage());
-//        }
-//        System.exit(0);
+        try {
+            for(Cliente amigo:amigosOnline.values()) amigo.eliminarAmigoOnline(nombreUsuario);
+            servidor.unlogin(nombreUsuario);
+        } catch (RemoteException e) {
+            System.out.println(e.getMessage());
+        }
+        System.exit(0);
     }
 
     public int enviarSolicitud(String solicitado) {
