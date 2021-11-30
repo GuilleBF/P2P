@@ -105,6 +105,7 @@ public class AppCliente extends Application {
                 principalLoader.setControllerFactory(c -> new PrincipalController(this));
                 escenario.setScene(new Scene(principalLoader.load()));
             } catch (IOException ex) {
+                ex.printStackTrace();
                 this.alertaError.setContentText("No se pudo cargar la ventana principal");
                 this.alertaError.show();
                 

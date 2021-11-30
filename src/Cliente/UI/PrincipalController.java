@@ -1,6 +1,6 @@
 package Cliente.UI;
 
-import java.awt.TextArea;
+import javafx.scene.control.TextArea;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -35,6 +35,11 @@ public class PrincipalController {
         
         this.app = app;
         this.mensajes = new HashMap<>();
+        
+    }
+    
+    @FXML
+    public void initialize() {
         
         // Añadimos el listener a la lista
         listaAmigos.getSelectionModel().selectedItemProperty().addListener((ObservableValue ov, Object t, Object t1) -> {
