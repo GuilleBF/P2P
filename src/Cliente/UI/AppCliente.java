@@ -53,7 +53,8 @@ public class AppCliente extends Application {
     
     @Override
     public void stop(){
-        cliente.shutdown();
+        if(cliente!=null)
+            cliente.shutdown();
     }
     
     public void lanzarVentanaLogin(String nombre, int puerto) {
