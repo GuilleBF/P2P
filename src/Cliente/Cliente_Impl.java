@@ -6,6 +6,7 @@ import common.Servidor;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
+import java.util.Set;
 
 public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
@@ -99,6 +100,10 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
     public String getNombreUsuario() {
         return this.nombreUsuario;
+    }
+    
+    public synchronized Set<String> getAmigosOnline(){
+        return amigosOnline.keySet();
     }
     
 }

@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Set;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -101,11 +102,12 @@ public class AppCliente extends Application {
         if(cliente.login(usuario, contra)){
             try {
                 // Lanzamos ventana principal
+                controladorPrincipal = new PrincipalController(this);
                 FXMLLoader principalLoader = new FXMLLoader(AppCliente.class.getResource("Principal.fxml"));
-                principalLoader.setControllerFactory(c -> new PrincipalController(this));
+                principalLoader.setControllerFactory(c -> controladorPrincipal);
                 escenario.setScene(new Scene(principalLoader.load()));
+                actualizarAmigos(cliente.getAmigosOnline());
             } catch (IOException ex) {
-                ex.printStackTrace();
                 this.alertaError.setContentText("No se pudo cargar la ventana principal");
                 this.alertaError.show();
                 
@@ -157,18 +159,22 @@ public class AppCliente extends Application {
     }
 
     public synchronized void popUpSolicitud(String solicitante, String solicitado) {
-        try {
-            if(solicitantes.contains(solicitante)) return; // Si el solicitante ya le mandó una petición, no se repite
-            // Lanzamos popup
-            solicitantes.add(solicitante);
-            Stage nuevoEscenario = new Stage();
-            nuevoEscenario.initModality(Modality.NONE);
-            FXMLLoader amistadLoader = new FXMLLoader(AppCliente.class.getResource("SolicitudAmistad.fxml"));
-            amistadLoader.setControllerFactory(c -> new SolicitudController(this, solicitante));
-            nuevoEscenario.setScene(new Scene(amistadLoader.load()));
-            nuevoEscenario.show();
-        } catch (IOException ex) {
-        }
+        
+        if(solicitantes.contains(solicitante)) return; // Si el solicitante ya le mandó una petición, no se repite
+        // Lanzamos popup
+        solicitantes.add(solicitante);
+        Platform.runLater(() -> {
+            try {
+                Stage nuevoEscenario = new Stage();
+                nuevoEscenario.initModality(Modality.NONE);
+                FXMLLoader amistadLoader = new FXMLLoader(AppCliente.class.getResource("SolicitudAmistad.fxml"));
+                amistadLoader.setControllerFactory(c -> new SolicitudController(this, solicitante));
+                nuevoEscenario.setScene(new Scene(amistadLoader.load()));
+                nuevoEscenario.show();
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+        });
     }
 
     public synchronized void responderSolicitud(String solicitante, boolean respuesta) {
@@ -181,8 +187,8 @@ public class AppCliente extends Application {
             alerta.setContentText("Ahora es amigo de "+solicitado);
         else
             alerta.setContentText("El usuario "+solicitado+" ha rechazado su peticion");
-        alerta.show();
+        Platform.runLater(() -> {
+            alerta.show();
+        });
     }
-    
-    
 }

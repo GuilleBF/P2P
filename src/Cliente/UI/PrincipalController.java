@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Set;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -86,7 +87,10 @@ public class PrincipalController {
             lista.add(nombreAmigo);
             if(!mensajes.containsKey(nombreAmigo)) mensajes.put(nombreAmigo, "");
         }
-        listaAmigos.setItems(lista);
+        
+        Platform.runLater(() -> {
+            listaAmigos.setItems(lista);
+        });
     }
     
 }

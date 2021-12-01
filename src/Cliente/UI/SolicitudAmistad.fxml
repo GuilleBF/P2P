@@ -7,7 +7,7 @@
 
 <Pane maxHeight="200.0" maxWidth="400.0" minHeight="200.0" minWidth="400.0" prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Cliente.UI.SolicitudController">
    <children>
-      <Label fx:id="texto" layoutX="17.0" layoutY="46.0" text="X te ha enviado una petición de amistad">
+      <Label fx:id="texto" layoutX="17.0" layoutY="46.0">
          <font>
             <Font size="18.0" />
          </font>
