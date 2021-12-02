@@ -19,3 +19,9 @@
     -fx-border-radius: 25px;
     -fx-background: none ;
 }
+
+#ventanaChat {
+    -fx-webkit-box-shadow: none;
+    -fx-moz-box-shadow: none;
+    -fx-box-shadow: none;
+}

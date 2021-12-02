@@ -64,9 +64,9 @@ public class PrincipalController {
     
     @FXML
     synchronized void pulsarBtnMensaje(ActionEvent e) {
-        String mensaje = construirMensaje(txtMensaje.getText());
         String amigo = (String) listaAmigos.getSelectionModel().getSelectedItem();
-        if(!mensaje.isEmpty() && amigo != null){
+        if(!txtMensaje.getText().isBlank() && amigo != null){
+            String mensaje = construirMensaje(txtMensaje.getText());
             app.send(amigo, mensaje);
             mensajes.put(amigo, mensajes.get(amigo)+mensaje);
             actualizarPanel();
