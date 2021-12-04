@@ -9,6 +9,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -19,50 +21,51 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class AppCliente extends Application {
-    
+
     private Cliente_Impl cliente;
     private Stage escenario;
     private Alert alertaError;
     private Alert alerta;
     private PrincipalController controladorPrincipal;
     private ArrayList<String> solicitantes;
-    
+
     public static void main(String[] args) {
-        launch(); 
+        launch();
     }
-    
+
     @Override
     public void start(Stage primaryStage) {
-       
+
         this.escenario = primaryStage;
         this.alertaError = new Alert(AlertType.ERROR);
         this.alerta = new Alert(AlertType.INFORMATION);
         this.solicitantes = new ArrayList<>();
-        
-        try{
-            
+
+        try {
+
             // 1. Lanzamos ventana inicio (datos servidor)
             FXMLLoader inicioLoader = new FXMLLoader(AppCliente.class.getResource("Inicio.fxml"));
             inicioLoader.setControllerFactory(c -> new InicioController(this));
             this.escenario.setScene(new Scene(inicioLoader.load()));
             this.escenario.show();
-            
-        }catch(IOException e){
+
+        } catch (IOException e) {
             System.out.println("No se pudo cargar la ventana inicial");
         }
     }
-    
+
     @Override
-    public void stop(){
-        if(cliente!=null)
+    public void stop() {
+        if (cliente != null) {
             cliente.shutdown();
+        }
     }
-    
+
     public void lanzarVentanaLogin(String nombre, int puerto) {
         try {
             // Creamos el objeto cliente pasandole el objeto servidor y la aplicación
             cliente = new Cliente_Impl((Servidor) Naming.lookup("rmi://" + nombre + ":" + puerto + "/servidor"), this);
-            
+
             // Lanzamos la ventana de login/registro
             FXMLLoader loginLoader = new FXMLLoader(AppCliente.class.getResource("Login.fxml"));
             loginLoader.setControllerFactory(c -> new LoginController(this));
@@ -75,11 +78,11 @@ public class AppCliente extends Application {
             this.alertaError.show();
         }
     }
-    
+
     public void registrar(String usuario, String contrasenha) {
         // Informamos del estado del registro
         try {
-            switch(cliente.registrar(usuario, contrasenha)){
+            switch (cliente.registrar(usuario, contrasenha)) {
                 case 0:
                     alerta.setContentText("Registrado correctamente");
                     alerta.show();
@@ -96,10 +99,10 @@ public class AppCliente extends Application {
             System.out.println(e.getMessage());
         }
     }
-    
+
     public void login(String usuario, String contra) {
         // Si login correcto, lanzamos la ventana principal
-        if(cliente.login(usuario, contra)){
+        if (cliente.login(usuario, contra)) {
             try {
                 // Lanzamos ventana principal
                 controladorPrincipal = new PrincipalController(this);
@@ -110,9 +113,9 @@ public class AppCliente extends Application {
             } catch (IOException ex) {
                 this.alertaError.setContentText("No se pudo cargar la ventana principal");
                 this.alertaError.show();
-                
+
             }
-        }else{
+        } else {
             // Error en el login
             this.alertaError.setContentText("Error en el login");
             this.alertaError.show();
@@ -135,23 +138,23 @@ public class AppCliente extends Application {
     }
 
     public void enviarSolicitud(String solicitado) {
-        switch(cliente.enviarSolicitud(solicitado)){
-                case 0:
-                    alerta.setContentText("Solicitud enviada a "+solicitado);
-                    alerta.show();
-                    break;
-                case 1:
-                    alertaError.setContentText("Error inesperado, usuario no alcanzable");
-                    alertaError.show();
-                    break;
-                case 2:
-                    alertaError.setContentText("Ya eres tu propio amigo :)");
-                    alertaError.show();
-                    break;
-                default:
-                    alertaError.setContentText("Ya eres amigo de " + solicitado);
-                    alertaError.show();
-            }
+        switch (cliente.enviarSolicitud(solicitado)) {
+            case 0:
+                alerta.setContentText("Solicitud enviada a " + solicitado);
+                alerta.show();
+                break;
+            case 1:
+                alertaError.setContentText("Error inesperado, usuario no alcanzable");
+                alertaError.show();
+                break;
+            case 2:
+                alertaError.setContentText("Ya eres tu propio amigo :)");
+                alertaError.show();
+                break;
+            default:
+                alertaError.setContentText("Ya eres amigo de " + solicitado);
+                alertaError.show();
+        }
     }
 
     public void actualizarAmigos(Set<String> amigos) {
@@ -159,9 +162,10 @@ public class AppCliente extends Application {
     }
 
     public synchronized void popUpSolicitud(String solicitante, String solicitado) {
-        
-        if(solicitantes.contains(solicitante)) return; // Si el solicitante ya le mandó una petición, no se repite
-        // Lanzamos popup
+
+        if (solicitantes.contains(solicitante)) {
+            return; // Si el solicitante ya le mandó una petición, no se repite
+        }        // Lanzamos popup
         solicitantes.add(solicitante);
         Platform.runLater(() -> {
             try {
@@ -183,12 +187,35 @@ public class AppCliente extends Application {
     }
 
     public void informarSolicitud(String solicitado, boolean respuesta) {
-        if(respuesta)
-            alerta.setContentText("Ahora es amigo de "+solicitado);
-        else
-            alerta.setContentText("El usuario "+solicitado+" ha rechazado su peticion");
+        if (respuesta) {
+            alerta.setContentText("Ahora es amigo de " + solicitado);
+        } else {
+            alerta.setContentText("El usuario " + solicitado + " ha rechazado su peticion");
+        }
         Platform.runLater(() -> {
             alerta.show();
         });
+    }
+
+    public void mostrarSugerencias(String busqueda) {
+        ArrayList<String> sugerencias = cliente.obtenerSugerencias(busqueda);
+        if (sugerencias != null && sugerencias.size() > 0) {
+            try {
+                // Mostrar ventana de sugerencias
+                Stage nuevoEscenario = new Stage();
+                nuevoEscenario.initModality(Modality.NONE);
+                FXMLLoader sugerenciasLoader = new FXMLLoader(AppCliente.class.getResource("Sugerencias.fxml"));
+                sugerenciasLoader.setControllerFactory(c -> new SugerenciasController(this, sugerencias));
+                nuevoEscenario.setScene(new Scene(sugerenciasLoader.load()));
+                nuevoEscenario.show();
+            } catch (IOException ex) {
+                alertaError.setContentText("No se han podido mostrar sugerencias");
+                alertaError.show();
+            }
+        } else {
+            // Mostrar NO sugerencias
+            alertaError.setContentText("No se han encontrado sugerencias");
+            alertaError.show();
+        }
     }
 }

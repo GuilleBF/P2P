@@ -145,4 +145,9 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
         }
     }
 
+    @Override
+    public ArrayList<String> obtenerSugerencias(String busqueda) throws RemoteException {
+        return bbdd.obtenerSugerencias(busqueda);
+    }
+
 }

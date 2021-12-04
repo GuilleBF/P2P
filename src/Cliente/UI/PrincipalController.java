@@ -77,7 +77,7 @@ public class PrincipalController {
     @FXML
     void pulsarBtnAmistad(ActionEvent e) {
         if(!txtAmistad.getText().isBlank())
-            app.enviarSolicitud(txtAmistad.getText());
+            app.mostrarSugerencias(txtAmistad.getText());
     }
 
     synchronized void actualizarAmigos(Set<String> amigos) {

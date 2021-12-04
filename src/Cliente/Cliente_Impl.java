@@ -5,8 +5,11 @@ import common.Cliente;
 import common.Servidor;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
@@ -104,6 +107,14 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     
     public synchronized Set<String> getAmigosOnline(){
         return amigosOnline.keySet();
+    }
+
+    public ArrayList<String> obtenerSugerencias(String busqueda) {
+        try {
+            return servidor.obtenerSugerencias(busqueda);
+        } catch (RemoteException ex) {
+            return null;
+        }
     }
     
 }

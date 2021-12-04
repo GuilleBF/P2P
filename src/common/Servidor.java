@@ -2,6 +2,7 @@ package common;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface Servidor extends Remote {
@@ -15,5 +16,7 @@ public interface Servidor extends Remote {
     public void responderSolicitud(String solicitante, String solicitado, boolean respuesta) throws RemoteException;
 
     public void unlogin(String usuario) throws RemoteException;
+
+    public ArrayList<String> obtenerSugerencias(String busqueda) throws RemoteException;
 
 }

@@ -260,4 +260,31 @@ public class BaseDatosHandler {
       
         return amigos;
     }
+
+    ArrayList<String> obtenerSugerencias(String busqueda) {
+        PreparedStatement query = null;
+        ResultSet resultados;
+        ArrayList<String> sugerencias = new ArrayList<>();
+        
+        try {
+            query = conexion.prepareStatement("select nombre "
+                    + "from usuario "
+                    + "where nombre like '?%'");
+            query.setString(1, busqueda);
+            resultados = query.executeQuery();
+            while(resultados.next()){
+                sugerencias.add(resultados.getString("nombre"));
+            }
+        } catch (SQLException e) {
+            sugerencias = null;
+        }
+        
+        // Cerramos los punteros
+        try {
+            if(query!=null) query.close();
+        } catch (SQLException e) {
+        }
+      
+        return sugerencias;
+    }
 }
