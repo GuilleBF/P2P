@@ -185,12 +185,13 @@ public class AppCliente extends Application {
     }
 
     public void informarSolicitud(String solicitado, boolean respuesta) {
-        if (respuesta) {
-            alerta.setContentText("Ahora es amigo de " + solicitado);
-        } else {
-            alerta.setContentText("El usuario " + solicitado + " ha rechazado su peticion");
-        }
         Platform.runLater(() -> {
+            alerta.hide();
+            if (respuesta) {
+                alerta.setContentText("Ahora es amigo de " + solicitado);
+            } else {
+                alerta.setContentText("El usuario " + solicitado + " ha rechazado su peticion");
+            }
             alerta.show();
         });
     }
@@ -210,11 +211,9 @@ public class AppCliente extends Application {
                 alertaError.setContentText("No se han podido mostrar sugerencias");
                 alertaError.show();
             }
-        } 
-        else if (sugerencias != null && sugerencias.size() > 0) {
+        } else if (sugerencias != null && sugerencias.size() > 0) {
             enviarSolicitud(busqueda);
-        }
-        else {
+        } else {
             // Mostrar NO sugerencias
             alertaError.setContentText("No se han encontrado sugerencias");
             alertaError.show();
