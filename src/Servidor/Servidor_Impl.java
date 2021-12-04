@@ -139,7 +139,7 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
                 LocateRegistry.createRegistry(puerto);
             }
             Naming.rebind("rmi://localhost:" + puerto + "/servidor", (Servidor) servidor);
-
+            System.out.println("Servidor lanzado. Todo correcto, funcionando");
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }

@@ -9,8 +9,6 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -199,7 +197,7 @@ public class AppCliente extends Application {
 
     public void mostrarSugerencias(String busqueda) {
         ArrayList<String> sugerencias = cliente.obtenerSugerencias(busqueda);
-        if (sugerencias != null && sugerencias.size() > 0) {
+        if (sugerencias != null && sugerencias.size() > 1) {
             try {
                 // Mostrar ventana de sugerencias
                 Stage nuevoEscenario = new Stage();
@@ -212,7 +210,11 @@ public class AppCliente extends Application {
                 alertaError.setContentText("No se han podido mostrar sugerencias");
                 alertaError.show();
             }
-        } else {
+        } 
+        else if (sugerencias != null && sugerencias.size() > 0) {
+            enviarSolicitud(busqueda);
+        }
+        else {
             // Mostrar NO sugerencias
             alertaError.setContentText("No se han encontrado sugerencias");
             alertaError.show();

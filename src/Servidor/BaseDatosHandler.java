@@ -269,8 +269,8 @@ public class BaseDatosHandler {
         try {
             query = conexion.prepareStatement("select nombre "
                     + "from usuario "
-                    + "where nombre like '?%'");
-            query.setString(1, busqueda);
+                    + "where nombre like ?");
+            query.setString(1, busqueda+"%");
             resultados = query.executeQuery();
             while(resultados.next()){
                 sugerencias.add(resultados.getString("nombre"));
