@@ -121,7 +121,11 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     
     public boolean cambiarContra(String nuevaContra){
         try {
-            return servidor.cambiarContrasenha(nombreUsuario, contrasenha, nuevaContra);
+            if(servidor.cambiarContrasenha(nombreUsuario, contrasenha, nuevaContra)){
+                contrasenha = nuevaContra;
+                return true;
+            }
+            return false;
         } catch (RemoteException ex) {
             return false;
         }
