@@ -219,4 +219,17 @@ public class AppCliente extends Application {
             alertaError.show();
         }
     }
+
+    public void cambiarContra(String contraNueva) {
+        if(cliente.cambiarContra(contraNueva)){
+            alerta.hide();
+            alerta.setContentText("Cambiada correctamente");
+            alerta.show();
+        }else{
+            alertaError.setContentText("Error");
+            alertaError.show();
+        }
+            
+        
+    }
 }

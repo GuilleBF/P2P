@@ -2,7 +2,6 @@ package Cliente.UI;
 
 import java.util.ArrayList;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
