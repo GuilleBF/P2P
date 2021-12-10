@@ -21,7 +21,8 @@
 }
 
 #ventanaChat {
-    -fx-webkit-box-shadow: none;
-    -fx-moz-box-shadow: none;
-    -fx-box-shadow: none;
+    -fx-border: none;
+    -fx-background-color: transparent;
+    -fx-resize: none;
+    -fx-outline: none;
 }

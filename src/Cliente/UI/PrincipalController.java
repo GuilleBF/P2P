@@ -30,8 +30,7 @@ public class PrincipalController {
     private TextArea areaMensaje;
     
     @FXML
-    private ListView listaAmigos;
-        
+    private ListView listaAmigos;   
     public PrincipalController(AppCliente app) {
         
         this.app = app;
