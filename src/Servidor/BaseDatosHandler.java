@@ -47,7 +47,7 @@ public class BaseDatosHandler {
         return conn;
     }
 
-    public boolean usuarioExiste(String nombre) {
+    boolean usuarioExiste(String nombre) {
         PreparedStatement query = null;
         boolean existe;
         try {
@@ -69,7 +69,7 @@ public class BaseDatosHandler {
         return existe;
     }
 
-    public boolean registrarUsuario(String nombre, String contrasenha) {
+    boolean registrarUsuario(String nombre, String contrasenha) {
         PreparedStatement insercion = null;
         boolean registrado;
         
@@ -93,7 +93,7 @@ public class BaseDatosHandler {
         return registrado;
     }
 
-    public boolean checkUsuario(String nombre, String contrasenha) {
+    boolean checkUsuario(String nombre, String contrasenha) {
         PreparedStatement query = null;
         boolean correcto;
         
@@ -171,7 +171,7 @@ public class BaseDatosHandler {
         return solicitantes;
     }
 
-    public int registrarSolicitud(String solicitante, String solicitado) {
+    int registrarSolicitud(String solicitante, String solicitado) {
         PreparedStatement insercion = null;
         int estado;
         
@@ -236,7 +236,7 @@ public class BaseDatosHandler {
         }
     }
 
-    public boolean sonAmigos(String usuario1, String usuario2) {
+    boolean sonAmigos(String usuario1, String usuario2) {
         PreparedStatement query = null;
         boolean amigos;
         
@@ -286,5 +286,29 @@ public class BaseDatosHandler {
         }
       
         return sugerencias;
+    }
+
+    boolean actualizarContra(String nombre, String contrasenhaNue) {
+        PreparedStatement update = null;
+        boolean exito;
+        
+        try {
+            update = conexion.prepareStatement("UPDATE usuario "
+                + "SET contrasenha=? "
+                + "WHERE usuario=?");
+            update.setString(1, contrasenhaNue);
+            update.setString(2, nombre);
+            exito = update.executeUpdate()>0;
+        } catch (SQLException e) {
+            exito = false;
+        }
+        
+        // Cerramos los punteros
+        try {
+            if (update != null) update.close();
+        } catch (SQLException e) {
+        }
+        
+        return exito;
     }
 }

@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
     String nombreUsuario;
+    String contrasenha;
     private HashMap<String, Cliente> amigosOnline;
     private final Servidor servidor;
     private final AppCliente app;
@@ -33,6 +34,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
             if(amigosOnline == null) return false;
             else{
                 this.nombreUsuario = usuario;
+                this.contrasenha = contrasenha;
                 return true;
             }
         } catch (RemoteException e) {
@@ -52,7 +54,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
     public void responderSolicitud(String solicitante, boolean respuesta) {
         try {
-            servidor.responderSolicitud(solicitante, this.nombreUsuario, respuesta);
+            servidor.responderSolicitud(solicitante, this.nombreUsuario, respuesta, this.contrasenha);
         } catch (RemoteException e) {
         }
     }
@@ -77,7 +79,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     public synchronized void shutdown() {
         try {
             for(Cliente amigo:amigosOnline.values()) amigo.eliminarAmigoOnline(nombreUsuario);
-            servidor.unlogin(nombreUsuario);
+            servidor.unlogin(nombreUsuario,contrasenha);
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
         }
@@ -90,7 +92,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         // 2: son la misma persona
         // 3: ya son amigos
         try {
-            return servidor.enviarSolicitud(this.nombreUsuario, solicitado);
+            return servidor.enviarSolicitud(this.nombreUsuario, solicitado, this.contrasenha);
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
             return 1;
@@ -111,9 +113,17 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
     public ArrayList<String> obtenerSugerencias(String busqueda) {
         try {
-            return servidor.obtenerSugerencias(busqueda);
+            return servidor.obtenerSugerencias(this.nombreUsuario,this.contrasenha,busqueda);
         } catch (RemoteException ex) {
             return null;
+        }
+    }
+    
+    public boolean cambiarContra(String nuevaContra){
+        try {
+            return servidor.cambiarContrasenha(nombreUsuario, contrasenha, nuevaContra);
+        } catch (RemoteException ex) {
+            return false;
         }
     }
     

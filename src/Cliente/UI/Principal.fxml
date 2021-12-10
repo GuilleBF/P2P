@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: ffffff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Cliente.UI.PrincipalController">
+<Pane minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: ffffff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Cliente.UI.PrincipalController">
    <children>
       <ImageView fitHeight="44.0" fitWidth="44.0" layoutX="32.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -65,11 +65,13 @@
          </children>
       </Pane>
       <ListView id="marcosBotones" fx:id="listaAmigos" fixedCellSize="0.0" layoutX="32.0" layoutY="138.0" prefHeight="428.0" prefWidth="200.0" stylesheets="@Estilos.css" />
-      <Button layoutX="728.0" layoutY="24.0" maxHeight="38.0" maxWidth="38.0" minHeight="38.0" minWidth="38.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="38.0" />
-      <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="728.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Recursos/icon_contrasena.png" />
-         </image>
-      </ImageView>
+      <Button layoutX="728.0" layoutY="24.0" maxHeight="38.0" maxWidth="38.0" minHeight="38.0" minWidth="38.0" mnemonicParsing="false" onAction="#pulsarBtnContrasenha" prefHeight="38.0" prefWidth="38.0">
+         <graphic>
+            <ImageView fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Recursos/icon_contrasena.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
    </children>
 </Pane>

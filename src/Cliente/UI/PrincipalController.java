@@ -78,6 +78,12 @@ public class PrincipalController {
         if(!txtAmistad.getText().isBlank())
             app.mostrarSugerencias(txtAmistad.getText());
     }
+    
+    @FXML
+    void pulsarBtnContrasenha(ActionEvent e) {
+        if(!txtAmistad.getText().isBlank())
+            app.mostrarSugerencias(txtAmistad.getText());
+    }
 
     synchronized void actualizarAmigos(Set<String> amigos) {
         ObservableList<String> lista = FXCollections.observableArrayList();

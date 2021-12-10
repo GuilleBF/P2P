@@ -42,7 +42,7 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
             
             // Procesamos sus solicitudes de amistad guardadas
             bbdd.obtenerSolicitudes(nombre).forEach(solicitante -> {
-                enviarSolicitud(solicitante, nombre);
+                enviarSolicitud(solicitante, nombre, contrasenha);
             });
             
             // Le obtenemos su lista de amigos
@@ -64,11 +64,13 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
     }
     
     @Override
-    public synchronized int enviarSolicitud(String solicitante, String solicitado){
+    public synchronized int enviarSolicitud(String solicitante, String solicitado, String contrasenha){
         // 0: registrada/enviada
         // 1: error indefinido
         // 2: son la misma persona
         // 3: ya son amigos
+        
+        if(!bbdd.checkUsuario(solicitante, contrasenha)) return 1; // Guarda de seguridad
         
         if(bbdd.sonAmigos(solicitante,solicitado)) return 3;
         if(solicitante.equals(solicitado)) return 2;
@@ -90,12 +92,14 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
     }
     
     @Override
-    public synchronized void unlogin(String usuario) throws RemoteException {
-        if(usuariosOnline.containsKey(usuario)) usuariosOnline.remove(usuario);
+    public synchronized void unlogin(String usuario, String contrasenha) throws RemoteException {
+        if(bbdd.checkUsuario(usuario, contrasenha) && usuariosOnline.containsKey(usuario)) usuariosOnline.remove(usuario);
     }
     
     @Override
-    public synchronized void responderSolicitud(String solicitante, String solicitado, boolean respuesta) {
+    public synchronized void responderSolicitud(String solicitante, String solicitado, boolean respuesta, String contrasenha) {
+        if(!bbdd.checkUsuario(solicitante, contrasenha)) return; // Guarda de seguridad
+        
         Cliente cliente_solicitante = usuariosOnline.get(solicitante);
         Cliente cliente_solicitado = usuariosOnline.get(solicitado);
         
@@ -114,6 +118,17 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
         
         // Eliminamos la solicitud si estaba en la BBDD
         bbdd.eliminarSolicitud(solicitante, solicitado);
+    }
+    
+    @Override
+    public ArrayList<String> obtenerSugerencias(String usuario, String contrasenha, String busqueda) throws RemoteException {
+        if(!bbdd.checkUsuario(usuario, contrasenha)) return null; // Guarda de seguridad
+        return bbdd.obtenerSugerencias(busqueda);
+    }
+    
+    @Override
+    public boolean cambiarContrasenha(String nombre, String contrasenhaAnt, String contrasenhaNue) throws RemoteException {
+        return bbdd.checkUsuario(nombre, contrasenhaAnt) && bbdd.actualizarContra(nombre, contrasenhaNue);
     }
 
     public static void main(String args[]) {
@@ -144,10 +159,4 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
             System.out.println(e.getMessage());
         }
     }
-
-    @Override
-    public ArrayList<String> obtenerSugerencias(String busqueda) throws RemoteException {
-        return bbdd.obtenerSugerencias(busqueda);
-    }
-
 }

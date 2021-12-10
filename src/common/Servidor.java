@@ -11,12 +11,14 @@ public interface Servidor extends Remote {
     
     public HashMap<String, Cliente> login(Cliente cliente, String nombre, String contrasenha) throws RemoteException;
     
-    public int enviarSolicitud(String solicitante, String solicitado) throws RemoteException;
+    public boolean cambiarContrasenha(String nombre, String contrasenhaAnt, String contrasenhaNue) throws RemoteException;
+    
+    public int enviarSolicitud(String solicitante, String solicitado, String contrasenha) throws RemoteException;
 
-    public void responderSolicitud(String solicitante, String solicitado, boolean respuesta) throws RemoteException;
+    public void responderSolicitud(String solicitante, String solicitado, boolean respuesta, String contrasenha) throws RemoteException;
 
-    public void unlogin(String usuario) throws RemoteException;
+    public void unlogin(String usuario, String contrasenha) throws RemoteException;
 
-    public ArrayList<String> obtenerSugerencias(String busqueda) throws RemoteException;
+    public ArrayList<String> obtenerSugerencias(String usuario, String contrasenha, String busqueda) throws RemoteException;
 
 }
