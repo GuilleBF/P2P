@@ -9,6 +9,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -231,5 +233,19 @@ public class AppCliente extends Application {
         }
             
         
+    }
+
+    public void mostrarVentanaContra() {
+        try {
+            Stage nuevoEscenario = new Stage();
+            nuevoEscenario.initModality(Modality.NONE);
+            FXMLLoader contraLoader = new FXMLLoader(AppCliente.class.getResource("CambiarContrasena.fxml"));
+            contraLoader.setControllerFactory(c -> new CambiarContrasenaController(this));
+            nuevoEscenario.setScene(new Scene(contraLoader.load()));
+            nuevoEscenario.show();
+        } catch (IOException ex) {
+            alertaError.setContentText("No se ha podido mostrar la ventana");
+            alertaError.show();
+        }
     }
 }

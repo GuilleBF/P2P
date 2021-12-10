@@ -81,9 +81,9 @@ public class PrincipalController {
     
     @FXML
     void pulsarBtnContrasenha(ActionEvent e) {
-        if(!txtAmistad.getText().isBlank())
-            app.mostrarSugerencias(txtAmistad.getText());
+        app.mostrarVentanaContra();
     }
+    
 
     synchronized void actualizarAmigos(Set<String> amigos) {
         ObservableList<String> lista = FXCollections.observableArrayList();
