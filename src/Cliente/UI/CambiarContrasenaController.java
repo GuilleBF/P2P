@@ -22,9 +22,9 @@ public class CambiarContrasenaController {
     }
     
     @FXML
-    void pulsarBtnEnviar(ActionEvent e) {
+    void pulsarBtnAceptar(ActionEvent e) {
         if(!txtContrasenaNueva.getText().isBlank() && !txtContrasenaActual.getText().isBlank())
-            app.cambiarContra(txtContrasenaNueva.getText());
+            app.cambiarContra(txtContrasenaActual.getText(), txtContrasenaNueva.getText());
             Platform.runLater(() -> {
                 ((Stage) txtContrasenaNueva.getScene().getWindow()).close();
             });

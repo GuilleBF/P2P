@@ -8,8 +8,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
@@ -119,9 +117,9 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
         }
     }
     
-    public boolean cambiarContra(String nuevaContra){
+    public boolean cambiarContra(String contraAnt,String nuevaContra){
         try {
-            if(servidor.cambiarContrasenha(nombreUsuario, contrasenha, nuevaContra)){
+            if(contrasenha.equals(contraAnt) && servidor.cambiarContrasenha(nombreUsuario, contrasenha, nuevaContra)){
                 contrasenha = nuevaContra;
                 return true;
             }

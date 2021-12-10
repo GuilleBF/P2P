@@ -222,8 +222,8 @@ public class AppCliente extends Application {
         }
     }
 
-    public void cambiarContra(String contraNueva) {
-        if(cliente.cambiarContra(contraNueva)){
+    public void cambiarContra(String contraAnt, String contraNueva) {
+        if(cliente.cambiarContra(contraAnt, contraNueva)){
             alerta.hide();
             alerta.setContentText("Cambiada correctamente");
             alerta.show();

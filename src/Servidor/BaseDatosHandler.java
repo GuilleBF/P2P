@@ -294,11 +294,12 @@ public class BaseDatosHandler {
         
         try {
             update = conexion.prepareStatement("UPDATE usuario "
-                + "SET contrasenha=? "
-                + "WHERE usuario=?");
+                + "SET contrasenha=crypt(?,gen_salt('md5')) "
+                + "WHERE nombre=?");
             update.setString(1, contrasenhaNue);
             update.setString(2, nombre);
-            exito = update.executeUpdate()>0;
+            update.executeUpdate();
+            exito = true;
         } catch (SQLException e) {
             exito = false;
         }

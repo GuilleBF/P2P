@@ -128,6 +128,7 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
     
     @Override
     public boolean cambiarContrasenha(String nombre, String contrasenhaAnt, String contrasenhaNue) throws RemoteException {
+        System.out.println(nombre + " || " + contrasenhaAnt + " || " + contrasenhaNue);
         return bbdd.checkUsuario(nombre, contrasenhaAnt) && bbdd.actualizarContra(nombre, contrasenhaNue);
     }
 
