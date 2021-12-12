@@ -98,11 +98,9 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
     
     @Override
     public synchronized void responderSolicitud(String solicitante, String solicitado, boolean respuesta, String contrasenha) {
-        if(!bbdd.checkUsuario(solicitante, contrasenha)) return; // Guarda de seguridad
-        
+        if(!bbdd.checkUsuario(solicitado, contrasenha)) return; // Guarda de seguridad
         Cliente cliente_solicitante = usuariosOnline.get(solicitante);
         Cliente cliente_solicitado = usuariosOnline.get(solicitado);
-        
         // Si el solicitante está online, le informamos de la respuesta y añadimos el uno a la lista del otro
         if(cliente_solicitante != null) try {
             cliente_solicitante.informarSolicitud(solicitado, respuesta);
