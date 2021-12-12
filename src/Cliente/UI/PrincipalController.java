@@ -4,8 +4,10 @@ import javafx.scene.control.TextArea;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,7 +37,6 @@ public class PrincipalController {
         
         this.app = app;
         this.mensajes = new HashMap<>();
-        
     }
     
     @FXML
@@ -43,13 +44,28 @@ public class PrincipalController {
         
         // Añadimos el listener a la lista
         listaAmigos.getSelectionModel().selectedItemProperty().addListener((ObservableValue ov, Object t, Object t1) -> {
+            String seleccionado = (String) listaAmigos.getSelectionModel().getSelectedItem();
+            if(seleccionado != null){
+                listaAmigos.getItems().remove(seleccionado);
+                listaAmigos.getItems().add(seleccionado.replaceAll(" ❗❗❗", ""));
+                listaAmigos.getSelectionModel().select(seleccionado.replaceAll(" ❗❗❗", ""));
+            }
             actualizarPanel();
+            
         });
     }
             
     synchronized void registrarMensaje(String emisor, String mensaje) {
         mensajes.put(emisor, mensajes.get(emisor) + mensaje);
-        actualizarPanel();
+        Platform.runLater(() -> {
+            actualizarPanel();
+            // Marcamos el nombre del usuario para indicar que hay mensaje sin leer
+            String seleccionado = (String) listaAmigos.getSelectionModel().getSelectedItem();
+            if(seleccionado == null || !(seleccionado.equals(emisor) || listaAmigos.getItems().contains(seleccionado+" ❗❗❗"))){
+                listaAmigos.getItems().remove(emisor);
+                listaAmigos.getItems().add(emisor+" ❗❗❗");
+            }
+        }); 
     }
 
     private void actualizarPanel() {
@@ -83,19 +99,16 @@ public class PrincipalController {
     void pulsarBtnContrasenha(ActionEvent e) {
         app.mostrarVentanaContra();
     }
-    
 
-    synchronized void actualizarAmigos(Set<String> amigos) {
-        ObservableList<String> lista = FXCollections.observableArrayList();
-        
-        for(String nombreAmigo : amigos){
-            lista.add(nombreAmigo);
-            if(!mensajes.containsKey(nombreAmigo)) mensajes.put(nombreAmigo, "");
-        }
-        
-        Platform.runLater(() -> {
-            listaAmigos.setItems(lista);
-        });
+    synchronized void anadirAmigoOnline(String amigo) {
+        listaAmigos.getItems().add(amigo);
+    }
+
+    synchronized void eliminarAmigoOnline(String nombre) {
+        if(listaAmigos.getItems().contains(nombre))
+            listaAmigos.getItems().remove(nombre);
+        else
+            listaAmigos.getItems().remove(nombre+" ❗❗❗");
     }
     
 }

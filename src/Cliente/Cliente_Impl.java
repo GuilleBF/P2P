@@ -65,13 +65,13 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     @Override
     public synchronized void anadirAmigoOnline(Cliente amigo, String nombre) throws RemoteException {
         amigosOnline.put(nombre, amigo);
-        app.actualizarAmigos(amigosOnline.keySet());
+        app.anadirAmigoOnline(nombre);
     }
 
     @Override
     public synchronized void eliminarAmigoOnline(String nombre) throws RemoteException {
         amigosOnline.remove(nombre);
-        app.actualizarAmigos(amigosOnline.keySet());
+        app.eliminarAmigoOnline(nombre);
     }
 
     public synchronized void shutdown() {

@@ -17,12 +17,13 @@
 
     -fx-border-color : #9A19FF;
     -fx-border-radius: 25px;
-    -fx-background: none ;
+    -fx-background-color: transparent;
 }
 
 #ventanaChat {
     -fx-border: none;
     -fx-background-color: transparent;
+    -fx-focus-color: transparent;
     -fx-resize: none;
     -fx-outline: none;
 }

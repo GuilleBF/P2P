@@ -8,9 +8,6 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -109,7 +106,9 @@ public class AppCliente extends Application {
                 FXMLLoader principalLoader = new FXMLLoader(AppCliente.class.getResource("Principal.fxml"));
                 principalLoader.setControllerFactory(c -> controladorPrincipal);
                 escenario.setScene(new Scene(principalLoader.load()));
-                actualizarAmigos(cliente.getAmigosOnline());
+                cliente.getAmigosOnline().forEach(amigo -> {
+                    anadirAmigoOnline(amigo);
+                });
             } catch (IOException ex) {
                 this.alertaError.setContentText("No se pudo cargar la ventana principal");
                 this.alertaError.show();
@@ -155,10 +154,6 @@ public class AppCliente extends Application {
                 alertaError.setContentText("Ya eres amigo de " + solicitado);
                 alertaError.show();
         }
-    }
-
-    public void actualizarAmigos(Set<String> amigos) {
-        controladorPrincipal.actualizarAmigos(amigos);
     }
 
     public synchronized void popUpSolicitud(String solicitante, String solicitado) {
@@ -247,5 +242,13 @@ public class AppCliente extends Application {
             alertaError.setContentText("No se ha podido mostrar la ventana");
             alertaError.show();
         }
+    }
+
+    public void anadirAmigoOnline(String nombre) {
+        controladorPrincipal.anadirAmigoOnline(nombre);
+    }
+
+    public void eliminarAmigoOnline(String nombre) {
+        controladorPrincipal.eliminarAmigoOnline(nombre);
     }
 }
