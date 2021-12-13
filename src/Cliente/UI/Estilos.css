@@ -1,29 +1,33 @@
 
-#camposTexto {
+.camposTexto {
 
     -fx-border-color : #9A19FF;
     -fx-border-radius: 5px;
     -fx-background: none ;
 }
 
-#botones {
+.botones {
     -fx-border-color: none;
     -fx-background-color: #9A19FF;
     -fx-color: #ffffff;
     -fx-border-radius: 5px;
 }
 
-#marcosBotones {
+.marcosBotones {
 
     -fx-border-color : #9A19FF;
     -fx-border-radius: 25px;
     -fx-background-color: #FFFFFF;
 }
 
-#ventanaChat {
+.ventanaChat {
     -fx-border: none;
     -fx-background-color: transparent;
     -fx-focus-color: transparent;
     -fx-resize: none;
     -fx-outline: none;
+}
+
+.botones_trans{
+    -fx-background-color: transparent;
 }
