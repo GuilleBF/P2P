@@ -44,7 +44,6 @@ public class Servidor_Impl extends UnicastRemoteObject implements Servidor {
 
             // Procesamos sus solicitudes de amistad guardadas
             bbdd.obtenerSolicitudes(nombre).forEach(solicitante -> {
-                System.out.println("A");
                 try {
                     cliente.popUpSolicitud(solicitante);
                 } catch (RemoteException e) {
