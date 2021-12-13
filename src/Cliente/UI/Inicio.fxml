@@ -16,12 +16,12 @@
             <Image url="@Recursos/logo_44_44.png" />
          </image>
       </ImageView>
-      <TextField id="camposTexto" fx:id="txtHost" layoutX="36.0" layoutY="128.0" maxHeight="36.0" maxWidth="228.0" minHeight="36.0" minWidth="228.0" prefHeight="36.0" prefWidth="228.0" stylesheets="@./Estilos.css" text="localhost">
+      <TextField fx:id="txtHost" layoutX="36.0" layoutY="128.0" maxHeight="36.0" maxWidth="228.0" minHeight="36.0" minWidth="228.0" prefHeight="36.0" prefWidth="228.0" styleClass="camposTexto" stylesheets="@./Estilos.css" text="localhost">
          <effect>
             <Blend />
          </effect>
       </TextField>
-      <TextField id="camposTexto" fx:id="txtPuerto" layoutX="36.0" layoutY="207.0" maxHeight="36.0" maxWidth="228.0" minHeight="36.0" minWidth="228.0" prefHeight="36.0" prefWidth="228.0" style="-fx-border-color: 9C22FF;" styleClass="camposTexto" stylesheets="@./Estilos.css" text="1099" />
+      <TextField fx:id="txtPuerto" layoutX="36.0" layoutY="207.0" maxHeight="36.0" maxWidth="228.0" minHeight="36.0" minWidth="228.0" prefHeight="36.0" prefWidth="228.0" style="-fx-border-color: 9C22FF;" styleClass="camposTexto" stylesheets="@./Estilos.css" text="1099" />
       <Label fx:id="labelHost" layoutX="33.0" layoutY="95.0" text="Host">
          <font>
             <Font size="18.0" />
@@ -37,7 +37,7 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Button id="botones" fx:id="btnConectar" defaultButton="true" layoutX="75.0" layoutY="265.0" maxHeight="35.0" maxWidth="150.0" minHeight="35.0" minWidth="150.0" mnemonicParsing="false" onAction="#pulsarBtnConectar" prefHeight="35.0" prefWidth="150.0" stylesheets="@./Estilos.css" text="CONECTAR" textFill="WHITE">
+      <Button fx:id="btnConectar" defaultButton="true" layoutX="75.0" layoutY="265.0" maxHeight="35.0" maxWidth="150.0" minHeight="35.0" minWidth="150.0" mnemonicParsing="false" onAction="#pulsarBtnConectar" prefHeight="35.0" prefWidth="150.0" styleClass="botones" stylesheets="@./Estilos.css" text="CONECTAR" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>

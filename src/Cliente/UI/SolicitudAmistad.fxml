@@ -12,12 +12,12 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button id="botones" defaultButton="true" layoutX="217.0" layoutY="123.0" maxHeight="35.0" maxWidth="150.0" minHeight="35.0" minWidth="150.0" mnemonicParsing="false" onAction="#pulsarBtnAceptar" prefHeight="35.0" prefWidth="150.0" stylesheets="@Estilos.css" text="ACEPTAR" textFill="WHITE">
+      <Button defaultButton="true" layoutX="217.0" layoutY="123.0" maxHeight="35.0" maxWidth="150.0" minHeight="35.0" minWidth="150.0" mnemonicParsing="false" onAction="#pulsarBtnAceptar" prefHeight="35.0" prefWidth="150.0" styleClass="botones" stylesheets="@Estilos.css" text="ACEPTAR" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button id="camposTexto" defaultButton="true" layoutX="33.0" layoutY="123.0" maxHeight="35.0" maxWidth="150.0" minHeight="35.0" minWidth="150.0" mnemonicParsing="false" onAction="#pulsarBtnRechazar" prefHeight="35.0" prefWidth="150.0" stylesheets="@Estilos.css" text="RECHAZAR" textFill="#9a19ff">
+      <Button defaultButton="true" layoutX="33.0" layoutY="123.0" maxHeight="35.0" maxWidth="150.0" minHeight="35.0" minWidth="150.0" mnemonicParsing="false" onAction="#pulsarBtnRechazar" prefHeight="35.0" prefWidth="150.0" styleClass="camposTexto" stylesheets="@Estilos.css" text="RECHAZAR" textFill="#9a19ff">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
