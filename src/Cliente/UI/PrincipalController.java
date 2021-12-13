@@ -95,6 +95,7 @@ public class PrincipalController {
     }
 
     synchronized void anadirAmigoOnline(String amigo) {
+        mensajes.put(amigo,"");
         Platform.runLater(() -> {
             listaAmigos.getItems().add(amigo);
         });
