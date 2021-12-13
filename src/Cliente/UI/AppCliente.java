@@ -156,11 +156,12 @@ public class AppCliente extends Application {
         }
     }
 
-    public synchronized void popUpSolicitud(String solicitante, String solicitado) {
+    public synchronized void popUpSolicitud(String solicitante) {
 
         if (solicitantes.contains(solicitante)) {
             return; // Si el solicitante ya le mandó una petición, no se repite
-        }        // Lanzamos popup
+        }        
+        // Lanzamos popup
         solicitantes.add(solicitante);
         Platform.runLater(() -> {
             try {

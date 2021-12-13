@@ -2,6 +2,7 @@ package Cliente;
 
 import Cliente.UI.AppCliente;
 import common.Cliente;
+import common.Cliente_Restricted;
 import common.Servidor;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -13,7 +14,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
     String nombreUsuario;
     String contrasenha;
-    private HashMap<String, Cliente> amigosOnline;
+    private HashMap<String, Cliente_Restricted> amigosOnline;
     private final Servidor servidor;
     private final AppCliente app;
     
@@ -46,8 +47,8 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     }
 
     @Override
-    public void popUpSolicitud(String solicitante, String solicitado) {
-        app.popUpSolicitud(solicitante, solicitado);
+    public void popUpSolicitud(String solicitante) {
+        app.popUpSolicitud(solicitante);
     }
 
     public void responderSolicitud(String solicitante, boolean respuesta) {
@@ -63,7 +64,7 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
     }
 
     @Override
-    public synchronized void anadirAmigoOnline(Cliente amigo, String nombre) throws RemoteException {
+    public synchronized void anadirAmigoOnline(Cliente_Restricted amigo, String nombre) throws RemoteException {
         amigosOnline.put(nombre, amigo);
         app.anadirAmigoOnline(nombre);
     }
@@ -76,7 +77,6 @@ public class Cliente_Impl extends UnicastRemoteObject implements Cliente {
 
     public synchronized void shutdown() {
         try {
-            for(Cliente amigo:amigosOnline.values()) amigo.eliminarAmigoOnline(nombreUsuario);
             servidor.unlogin(nombreUsuario,contrasenha);
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
